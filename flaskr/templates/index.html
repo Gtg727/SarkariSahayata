@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SarkariSahayata</title> <!-- ✅ Changed Title -->
+
+  <!-- Bootstrap + icons + fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="top-strip"></div>
+
+  <!-- header -->
+  <header class="bg-white shadow-sm">
+    <div class="container d-flex align-items-center justify-content-between py-3">
+      <a class="d-flex align-items-center text-decoration-none" href="index.html">
+        <img src="/static/images/logo.png" alt="logo" class="logo me-3">
+        <div>
+          <div class="site-title">SarkariSahayata</div>
+          <div class="site-sub">सरकारी सहायता — Multilingual Smart Portal</div>
+        </div>
+      </a>
+
+      <div class="d-flex align-items-center gap-2">
+        <select id="langSelect" class="form-select form-select-sm me-2">
+          <option>English</option>
+          <option>हिंदी</option>
+          <option>मराठी</option>
+          <option>ગુજરાતી</option>
+        </select>
+
+        {% if g.user %}
+          <a class="btn" href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+          <a class="btn btn-outline-primary me-2" href="{{ url_for('auth.login') }}"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+          <a class="btn btn-success" href="{{ url_for('auth.register') }}"><i class="bi bi-pencil-square"></i> Register</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <nav class="nav-blue">
+      <div class="container d-flex gap-4 align-items-center">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="#categories">Categories</a>
+        <a class="nav-link" href="#quick">Quick Access</a>
+        <a class="nav-link" href="#">Chatbot</a>
+        <a class="nav-link" href="#">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- hero -->
+  <main>
+    <section class="hero d-flex align-items-center">
+      <div class="hero-overlay"></div>
+      <div class="container text-white text-center hero-content">
+        <h1 class="display-5 fw-bold">SarkariSahayata</h1>
+        <h3 class="fw-semibold hindi-title">सरकारी सहायता</h3>
+        <p class="lead mt-3">Your one-stop multilingual portal for Government schemes — find eligibility, benefits and apply online in your language.</p>
+        <div class="mt-4">
+          <a class="btn btn-primary btn-lg me-2" href="register.html"><i class="bi bi-search"></i> Find My Schemes</a>
+          <a class="btn btn-outline-light btn-lg" href="#"><i class="bi bi-play-circle"></i> Watch Demo</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- categories -->
+    <section id="categories" class="container mt-5">
+      <h2 class="text-center">Categories | सेवाओं के प्रकार</h2>
+      <p class="text-center text-muted">Click a category to explore relevant government schemes</p>
+
+      <div class="row g-4 mt-3">
+        <!-- Agriculture -->
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/agriculture.html">
+            <img src="/static/images/agriculture.jpg" alt="Agriculture" class="card-img-top">
+            <div class="card-body text-center">
+              <h5>Agriculture, Rural & Environment</h5>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/education.html">
+            <img src="/static/images/education.jpg" alt="Education" class="card-img-top">
+            <div class="card-body text-center"><h5>Education & Learning</h5></div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/women_child.html">
+            <img src="/static/images/women_child.jpg" alt="Women and Child" class="card-img-top">
+            <div class="card-body text-center"><h5>Women & Child</h5></div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/transport.html">
+            <img src="/static/images/transport.jpg" alt="Transport" class="card-img-top">
+            <div class="card-body text-center"><h5>Transport & Infrastructure</h5></div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/sports_culture.html">
+            <img src="/static/images/sports_culture.jpg" alt="Sports and Culture" class="card-img-top">
+            <div class="card-body text-center"><h5>Sports & Culture</h5></div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/housing.html">
+            <img src="/static/images/housing.jpg" alt="Housing" class="card-img-top">
+            <div class="card-body text-center"><h5>Housing & Shelter</h5></div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/health.html">
+            <img src="/static/images/health.jpg" alt="Health" class="card-img-top">
+            <div class="card-body text-center"><h5>Health & Wellness</h5></div>
+          </a>
+        </div>
+
+        <div class="col-md-3">
+          <a class="card category-card text-decoration-none" href="categories/skills.html">
+            <img src="/static/images/skills.jpg" alt="Skills" class="card-img-top">
+            <div class="card-body text-center"><h5>Skills & Employment</h5></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- quick access -->
+    <section id="quick" class="container mt-5">
+      <h2 class="text-center">Quick Access Services</h2>
+      <div class="row g-4 mt-3">
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm text-center">
+            <i class="bi bi-check2-circle" style="font-size:36px;color:#10b981"></i>
+            <h5 class="mt-2">Eligibility Check</h5>
+            <p class="text-muted">Quickly check which schemes you qualify for</p>
+            <a class="btn btn-success">Check Eligibility</a>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm text-center">
+            <i class="bi bi-robot" style="font-size:36px;color:#1e64e6"></i>
+            <h5 class="mt-2">AI Assistant</h5>
+            <p class="text-muted">Chat in your native language for help</p>
+            <a class="btn btn-primary">Chat Now</a>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm text-center">
+            <i class="bi bi-file-earmark-check" style="font-size:36px;color:#374151"></i>
+            <h5 class="mt-2">Application Status</h5>
+            <p class="text-muted">Track your application status</p>
+            <a class="btn btn-dark">Track Application</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- cta -->
+    <section class="cta-band mt-5 text-center text-white py-5">
+      <div class="container">
+        <h3>Ready to Explore Government Benefits?</h3>
+        <p class="mb-4">Join millions of Indians who have already benefited from government schemes.</p>
+        <a class="btn btn-success btn-lg me-3" href="/register.html"><i class="bi bi-person-plus"></i> Register Now</a>
+        <a class="btn btn-outline-light btn-lg" href="#"><i class="bi bi-download"></i> Download Brochure</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer-dark mt-4">
+    <div class="container py-4">
+      <div class="row">
+        <div class="col-md-4">
+          <h6>Contact</h6>
+          <p class="small mb-1">Helpline: 1800-111-999</p>
+          <p class="small mb-0">help@sarkarisahayata.gov.in</p>
+        </div>
+        <div class="col-md-4">
+          <h6>Popular Schemes</h6>
+          <ul class="list-unstyled small">
+            <li>PM Kisan Yojana</li>
+            <li>PMAY Housing</li>
+            <li>Ayushman Bharat</li>
+          </ul>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <h6>Development</h6>
+          <p class="small mb-0">Your College / Team Name</p>
+          <p class="small">© 2024 SarkariSahayata (Demo)</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
