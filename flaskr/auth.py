@@ -1,4 +1,6 @@
 import functools
+import time
+import random
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -24,16 +26,27 @@ def register():
             error = 'Password is required.'
 
         if error is None:
+            otp = str(random.randint(100000, 999999))
+            print(otp)
             try:
                 db.execute(
                     "INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
                     (username, email, generate_password_hash(password)),
                 )
                 db.commit()
+
+                user = db.execute(
+                    'SELECT * FROM user WHERE username = ?', (username,)
+                ).fetchone()
+                db.execute("INSERT INTO otps (id, otp, created) VALUES (?, ?, ?)",
+                           (user['id'],otp,time.time()),
+                           )
+                
+                db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
-                return redirect(url_for("auth.login"))
+                return redirect(url_for("auth.verify_otp",email=email))
 
         flash(error)
 
@@ -79,3 +92,24 @@ def load_logged_in_user():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@bp.route('/verify-otp/<email>', methods=('GET', 'POST'))
+def verify_otp(email):
+    db = get_db()
+    user = db.execute("SELECT * FROM user WHERE email=?", (email,)).fetchone()
+
+    if not user:
+        flash("Invalid email for verification.")
+        return redirect(url_for("auth.register"))
+    
+    record = db.execute("SELECT * FROM otps WHERE id=?", (user['id'],)).fetchone()
+    
+    if request.method == 'POST':
+        otp = request.form['otp']
+        if record['otp'] == otp and (time.time() - record['created'] < 6000):
+            if user['is_registered']:
+                return redirect(url_for("auth.registration_success"))
+            else:
+                return redirect(url_for("index"))
+            
+    return render_template('auth/verify_otp.html')
