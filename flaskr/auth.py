@@ -9,6 +9,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
 
+from flaskr import email, mail
+
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
@@ -16,7 +18,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        email = request.form['email']
+        emails = request.form['email']
         db = get_db()
         error = None
 
@@ -31,7 +33,7 @@ def register():
             try:
                 db.execute(
                     "INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
-                    (username, email, generate_password_hash(password)),
+                    (username, emails, generate_password_hash(password)),
                 )
                 db.commit()
 
@@ -46,7 +48,10 @@ def register():
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
-                return redirect(url_for("auth.verify_otp",email=email))
+                html = render_template('auth/confirmation_mail.html',otp=otp)
+                email.send_email(user['email'],"otp, check ker agasthi",html,mail)
+                print("yayyyy")
+                return redirect(url_for("auth.verify_otp",email_s=user['email']))
 
         flash(error)
 
@@ -93,10 +98,10 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-@bp.route('/verify-otp/<email>', methods=('GET', 'POST'))
-def verify_otp(email):
+@bp.route('/verify-otp/<email_s>', methods=('GET', 'POST'))
+def verify_otp(email_s):
     db = get_db()
-    user = db.execute("SELECT * FROM user WHERE email=?", (email,)).fetchone()
+    user = db.execute("SELECT * FROM user WHERE email=?", (email_s,)).fetchone()
 
     if not user:
         flash("Invalid email for verification.")

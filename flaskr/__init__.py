@@ -1,6 +1,8 @@
 import os
-
+from flask_mail import Mail
 from flask import Flask
+
+mail = Mail()
 
 def create_app(test_config=None):
     # create and configure the app
@@ -23,11 +25,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import db
-    db.init_app(app)
-
     from . import auth
     app.register_blueprint(auth.bp)
+
+    mail.init_app(app)
+    
+    from . import db
+    db.init_app(app)
 
     from . import home
     app.register_blueprint(home.bp)
