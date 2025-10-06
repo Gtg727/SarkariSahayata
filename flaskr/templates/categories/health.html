@@ -8,31 +8,21 @@
 </head>
 <body>
   <div class="container py-4">
-    <a href="../index.html" class="btn btn-link mb-3">&larr; Back to home</a>
-
-    <div class="row g-4 align-items-center">
-      <div class="col-md-5">
-        <img src="../images/health.jpg" alt="Health" class="img-fluid rounded shadow-sm">
-      </div>
-      <div class="col-md-7">
-        <h2>Health & Wellness</h2>
-        <p class="text-muted">Here are sample health schemes. Replace with real data later.</p>
-
-        <div class="list-group mt-3">
-          <div class="list-group-item">
-            <h5 class="mb-1">Ayushman Bharat - PMJAY</h5>
-            <p class="mb-1 text-muted">Health insurance cover up to ₹5 lakh per family per year.</p>
-            <a class="btn btn-sm btn-primary">Learn More</a>
-          </div>
-
-          <div class="list-group-item mt-3">
-            <h5 class="mb-1">Janani Suraksha Yojana</h5>
-            <p class="mb-1 text-muted">Safe motherhood intervention under the National Health Mission.</p>
-            <a class="btn btn-sm btn-primary">Learn More</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-link mb-3">&larr; Back to home</a>
+    <h2>Health & Wellness</h2>
+    <ul class="list-group mt-3">
+      <li class="list-group-item">
+        <a href="{{ url_for('static', filename='schemes/health/Ayushman-Bharat-PMJAY.html') }}">
+          Ayushman Bharat – Pradhan Mantri Jan Arogya Yojana (PM-JAY)
+        </a>
+      </li>
+      <li class="list-group-item">
+        <a href="{{ url_for('static', filename='schemes/health/PM-Bhartiya-Janaushadhi-Pariyojana.html') }}">
+          Pradhan Mantri Bhartiya Janaushadhi Pariyojana
+        </a>
+      </li>
+    </ul>
   </div>
 </body>
 </html>
+

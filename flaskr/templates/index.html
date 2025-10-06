@@ -86,70 +86,91 @@
 
     <!-- categories -->
     <section id="categories" class="container mt-5">
-      <h2 class="text-center">Categories | सेवाओं के प्रकार</h2>
-      <p class="text-center text-muted">Click a category to explore relevant government schemes</p>
+  <h2 class="text-center">Categories | सेवाओं के प्रकार</h2>
+  <p class="text-center text-muted">Click a category to explore relevant government schemes</p>
 
-      <div class="row g-4 mt-3">
-        <!-- Agriculture -->
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/agriculture.html">
-            <img src="/static/images/agriculture.jpg" alt="Agriculture" class="card-img-top">
-            <div class="card-body text-center">
-              <h5>Agriculture, Rural & Environment</h5>
-            </div>
-          </a>
+  <div class="row g-4 mt-3">
+    <!-- Agriculture -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.agriculture') }}">
+        <img src="{{ url_for('static', filename='images/agriculture.jpg') }}" alt="Agriculture" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Agriculture, Rural & Environment</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/education.html">
-            <img src="/static/images/education.jpg" alt="Education" class="card-img-top">
-            <div class="card-body text-center"><h5>Education & Learning</h5></div>
-          </a>
+    <!-- Education -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.education') }}">
+        <img src="{{ url_for('static', filename='images/education.jpg') }}" alt="Education" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Education & Learning</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/women_child.html">
-            <img src="/static/images/women_child.jpg" alt="Women and Child" class="card-img-top">
-            <div class="card-body text-center"><h5>Women & Child</h5></div>
-          </a>
+    <!-- Women and Child -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.women_child') }}">
+        <img src="{{ url_for('static', filename='images/women_child.jpg') }}" alt="Women and Child" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Women & Child</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/transport.html">
-            <img src="/static/images/transport.jpg" alt="Transport" class="card-img-top">
-            <div class="card-body text-center"><h5>Transport & Infrastructure</h5></div>
-          </a>
+    <!-- Transport -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.transport') }}">
+        <img src="{{ url_for('static', filename='images/transport.jpg') }}" alt="Transport" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Transport & Infrastructure</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/sports_culture.html">
-            <img src="/static/images/sports_culture.jpg" alt="Sports and Culture" class="card-img-top">
-            <div class="card-body text-center"><h5>Sports & Culture</h5></div>
-          </a>
+    <!-- Sports & Culture -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.sports_culture') }}">
+        <img src="{{ url_for('static', filename='images/sports_culture.jpg') }}" alt="Sports and Culture" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Sports & Culture</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/housing.html">
-            <img src="/static/images/housing.jpg" alt="Housing" class="card-img-top">
-            <div class="card-body text-center"><h5>Housing & Shelter</h5></div>
-          </a>
+    <!-- Housing -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.housing') }}">
+        <img src="{{ url_for('static', filename='images/housing.jpg') }}" alt="Housing" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Housing & Shelter</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/health.html">
-            <img src="/static/images/health.jpg" alt="Health" class="card-img-top">
-            <div class="card-body text-center"><h5>Health & Wellness</h5></div>
-          </a>
+    <!-- Health -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.health') }}">
+        <img src="{{ url_for('static', filename='images/health.jpg') }}" alt="Health" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Health & Wellness</h5>
         </div>
+      </a>
+    </div>
 
-        <div class="col-md-3">
-          <a class="card category-card text-decoration-none" href="categories/skills.html">
-            <img src="/static/images/skills.jpg" alt="Skills" class="card-img-top">
-            <div class="card-body text-center"><h5>Skills & Employment</h5></div>
-          </a>
+    <!-- Skills -->
+    <div class="col-md-3">
+      <a class="card category-card text-decoration-none" href="{{ url_for('categories.skills') }}">
+        <img src="{{ url_for('static', filename='images/skills.jpg') }}" alt="Skills" class="card-img-top">
+        <div class="card-body text-center">
+          <h5>Skills & Employment</h5>
         </div>
-      </div>
-    </section>
+      </a>
+    </div>
+  </div>
+</section>
 
     <!-- quick access -->
     <section id="quick" class="container mt-5">

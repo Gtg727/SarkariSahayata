@@ -8,31 +8,20 @@
 </head>
 <body>
   <div class="container py-4">
-    <a href="../index.html" class="btn btn-link mb-3">&larr; Back to home</a>
-
-    <div class="row g-4 align-items-center">
-      <div class="col-md-5">
-        <img src="../images/women_child.jpg" alt="Women & Child" class="img-fluid rounded shadow-sm">
-      </div>
-      <div class="col-md-7">
-        <h2>Women & Child</h2>
-        <p class="text-muted">Here are sample schemes for women and children. Replace with real data later.</p>
-
-        <div class="list-group mt-3">
-          <div class="list-group-item">
-            <h5 class="mb-1">Beti Bachao Beti Padhao</h5>
-            <p class="mb-1 text-muted">Promotes education and empowerment of the girl child.</p>
-            <a class="btn btn-sm btn-primary">Learn More</a>
-          </div>
-
-          <div class="list-group-item mt-3">
-            <h5 class="mb-1">Integrated Child Development Services (ICDS)</h5>
-            <p class="mb-1 text-muted">Nutrition, health, and pre-school education for children.</p>
-            <a class="btn btn-sm btn-primary">Learn More</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-link mb-3">&larr; Back to home</a>
+    <h2>Women & Child</h2>
+    <ul class="list-group mt-3">
+      <li class="list-group-item">
+        <a href="{{ url_for('static', filename='schemes/women_child/Beti-Bachao-Beti-Padhao.html') }}">
+          Beti Bachao Beti Padhao
+        </a>
+      </li>
+      <li class="list-group-item">
+        <a href="{{ url_for('static', filename='schemes/women_child/ICDS.html') }}">
+          Integrated Child Development Services (ICDS)
+        </a>
+      </li>
+    </ul>
   </div>
 </body>
 </html>

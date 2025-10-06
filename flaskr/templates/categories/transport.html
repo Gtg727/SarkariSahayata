@@ -8,31 +8,21 @@
 </head>
 <body>
   <div class="container py-4">
-    <a href="../index.html" class="btn btn-link mb-3">&larr; Back to home</a>
-
-    <div class="row g-4 align-items-center">
-      <div class="col-md-5">
-        <img src="../images/transport.jpg" alt="Transport" class="img-fluid rounded shadow-sm">
-      </div>
-      <div class="col-md-7">
-        <h2>Transport & Infrastructure</h2>
-        <p class="text-muted">Here are sample schemes for transport. Replace with real data later.</p>
-
-        <div class="list-group mt-3">
-          <div class="list-group-item">
-            <h5 class="mb-1">Pradhan Mantri Gram Sadak Yojana</h5>
-            <p class="mb-1 text-muted">Provides rural road connectivity across India.</p>
-            <a class="btn btn-sm btn-primary">Learn More</a>
-          </div>
-
-          <div class="list-group-item mt-3">
-            <h5 class="mb-1">National Electric Mobility Mission</h5>
-            <p class="mb-1 text-muted">Promotes adoption and manufacturing of electric vehicles.</p>
-            <a class="btn btn-sm btn-primary">Learn More</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-link mb-3">&larr; Back to home</a>
+    <h2>Transport & Infrastructure</h2>
+    <ul class="list-group mt-3">
+      <li class="list-group-item">
+        <a href="{{ url_for('static', filename='schemes/transport/PMGSY.html') }}">
+          Pradhan Mantri Gram Sadak Yojana (PMGSY)
+        </a>
+      </li>
+      <li class="list-group-item">
+        <a href="{{ url_for('static', filename='schemes/transport/National-Electric-Mobility-Mission.html') }}">
+          National Electric Mobility Mission
+        </a>
+      </li>
+    </ul>
   </div>
 </body>
 </html>
+
