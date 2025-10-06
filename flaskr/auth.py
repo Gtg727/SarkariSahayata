@@ -13,6 +13,29 @@ from flaskr import email, mail
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+def create_otp(id):
+    db = get_db()
+
+    otp = str(random.randint(100000, 999999))
+
+    try:
+        db.execute(
+            "INSERT INTO otps (id, otp, created) VALUES (?, ?, ?)",
+            (id,otp,time.time()),
+        )
+    except:
+        db.execute(
+            "DELETE FROM otps Where id=?",(id,),
+        )
+        db.commit()
+        db.execute(
+            "INSERT INTO otps (id, otp, created) VALUES (?, ?, ?)",
+            (id,otp,time.time()),
+        )
+
+    db.commit()
+    return otp
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -28,8 +51,6 @@ def register():
             error = 'Password is required.'
 
         if error is None:
-            otp = str(random.randint(100000, 999999))
-            print(otp)
             try:
                 db.execute(
                     "INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
@@ -40,17 +61,13 @@ def register():
                 user = db.execute(
                     'SELECT * FROM user WHERE username = ?', (username,)
                 ).fetchone()
-                db.execute("INSERT INTO otps (id, otp, created) VALUES (?, ?, ?)",
-                           (user['id'],otp,time.time()),
-                           )
-                
-                db.commit()
+
+                otp = create_otp(user['id'])
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
                 html = render_template('auth/confirmation_mail.html',otp=otp)
-                email.send_email(user['email'],"otp, check ker agasthi",html,mail)
-                print("yayyyy")
+                email.send_email(user['email'],"Otp to verify registration",html,mail)
                 return redirect(url_for("auth.verify_otp",email_s=user['email']))
 
         flash(error)
@@ -72,11 +89,13 @@ def login():
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
+        elif user['is_registered'] == 0:
+            error = 'email not verified , repeat registration process again'
 
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('static',filename="auth/login_success.html"))
 
         flash(error)
 
@@ -100,6 +119,7 @@ def logout():
 
 @bp.route('/verify-otp/<email_s>', methods=('GET', 'POST'))
 def verify_otp(email_s):
+    duration = 600
     db = get_db()
     user = db.execute("SELECT * FROM user WHERE email=?", (email_s,)).fetchone()
 
@@ -111,10 +131,27 @@ def verify_otp(email_s):
     
     if request.method == 'POST':
         otp = request.form['otp']
-        if record['otp'] == otp and (time.time() - record['created'] < 6000):
+        if record['otp'] == otp and (time.time() - record['created'] < duration):
             if user['is_registered']:
-                return redirect(url_for("auth.registration_success"))
+                return redirect(url_for("static",filename="auth/login_success.html"))
             else:
-                return redirect(url_for("index"))
+                db.execute(
+                    "UPDATE user SET is_registered = TRUE WHERE id=?", (user['id'],)
+                )
+                db.commit()
+                return redirect(url_for("static",filename="auth/registration_success.html"))
+        else:
+            if record['otp'] != otp:
+                flash("Wrong otp")
             
     return render_template('auth/verify_otp.html')
+
+def login_required(f):
+    @functools.wraps(f)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return f(**kwargs)
+
+    return wrapped_view

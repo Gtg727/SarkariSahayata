@@ -1,4 +1,5 @@
 import os
+import functools
 from flask_mail import Mail
 from flask import Flask
 

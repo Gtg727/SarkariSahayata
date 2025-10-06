@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE if EXISTS otps;
+DROP TABLE if EXISTS user_details;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,3 +16,17 @@ CREATE TABLE otps (
   created BIGINT,
   FOREIGN KEY (id) REFERENCES user (id)
 );
+
+CREATE TABLE user_details (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  age INTEGER,
+  gender TEXT,
+  income INTEGER,
+  caste TEXT,
+  states TEXT,
+  occupation TEXT,
+  aadhar TEXT,
+  pan TEXT,
+  user_id INTEGER
+)
