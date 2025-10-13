@@ -35,7 +35,7 @@
         </select>
 
         {% if g.user %}
-          <a class="btn" href="{{ url_for('home.add_details') }}">Add detail</a>
+          <p>Welcome, {{g.user['username']}}</p>
           <a class="btn" href="{{ url_for('auth.logout') }}">Logout</a>
         {% else %}
           <a class="btn btn-outline-primary me-2" href="{{ url_for('auth.login') }}"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>

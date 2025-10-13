@@ -1,28 +1,95 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agriculture — SarkariSahayata</title>
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      font-weight: 500;
+      color: #007bff;
+    }
+
+    .back-btn:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: 0.3s;
+    }
+
+    .card-title {
+      margin-bottom: 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
-  <div class="container py-4">
-    <a href="{{ url_for('index') }}" class="btn btn-link mb-3">&larr; Back to home</a>
-    <h2>Agriculture, Rural & Environment</h2>
-    <ul class="list-group mt-3">
-      <li class="list-group-item">
-        <a href="{{ url_for('static', filename='schemes/agriculture/PM-Kisan-Samman-Nidhi.html') }}">
-          Pradhan Mantri Kisan Samman Nidhi
+
+  <div class="container py-5">
+    <a href="{{ url_for('index') }}" class="back-btn mb-4 d-inline-block">
+      <i class="bi bi-arrow-left-circle"></i> Back to Home
+    </a>
+
+    <h2 class="mb-4">Agriculture, Rural & Environment Schemes</h2>
+
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <a href="{{ url_for('static', filename='schemes/agriculture/PM-Kisan-Samman-Nidhi.html') }}" class="card-link">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="bi bi-flower1 me-2"></i>Pradhan Mantri Kisan Samman Nidhi
+              </h5>
+            </div>
+          </div>
         </a>
-      </li>
-      <li class="list-group-item">
-        <a href="{{ url_for('static', filename='schemes/agriculture/PM-Adarsh-Gram-Yojana.html') }}">
-          Pradhan Mantri Adarsh Gram Yojana
+      </div>
+
+      <div class="col-md-6">
+        <a href="{{ url_for('static', filename='schemes/agriculture/PM-Adarsh-Gram-Yojana .html') }}" class="card-link">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="bi bi-house-door me-2"></i>Pradhan Mantri Adarsh Gram Yojana
+              </h5>
+            </div>
+          </div>
         </a>
-      </li>
-    </ul>
+      </div>
+
+    </div>
   </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

@@ -139,7 +139,8 @@ def verify_otp(email_s):
                     "UPDATE user SET is_registered = TRUE WHERE id=?", (user['id'],)
                 )
                 db.commit()
-                return redirect(url_for("static",filename="auth/registration_success.html"))
+                #return redirect(url_for("static",filename="auth/registration_success.html"))
+                return redirect(url_for('static',filename="auth/login_success.html"))
         else:
             if record['otp'] != otp:
                 flash("Wrong otp")
