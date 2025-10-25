@@ -12,6 +12,15 @@
       <div class="col-md-6">
         <div class="card shadow-sm p-4">
           <h3 class="mb-3">Register</h3>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                  {{message}}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
           <form id="registerForm" action="#" method="POST">
             <label class="form-label">User Name</label>
             <input name="username" class="form-control mb-3" required>
