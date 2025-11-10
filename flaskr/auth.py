@@ -15,21 +15,22 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 def create_otp(id):
     db = get_db()
+    cur = db.cursor()
 
     otp = str(random.randint(100000, 999999))
 
     try:
-        db.execute(
-            "INSERT INTO otps (id, otp, created) VALUES (?, ?, ?)",
+        cur.execute(
+            "INSERT INTO otps (id, otp, created) VALUES (%s, %s, %s)",
             (id,otp,time.time()),
         )
     except:
-        db.execute(
-            "DELETE FROM otps Where id=?",(id,),
+        cur.execute(
+            "DELETE FROM otps Where id=%s",(id,),
         )
         db.commit()
-        db.execute(
-            "INSERT INTO otps (id, otp, created) VALUES (?, ?, ?)",
+        cur.execute(
+            "INSERT INTO otps (id, otp, created) VALUES (%s, %s, %s)",
             (id,otp,time.time()),
         )
 
@@ -43,6 +44,7 @@ def register():
         password = request.form['password']
         emails = request.form['email']
         db = get_db()
+        cur = db.cursor()
         error = None
 
         if not username:
@@ -52,18 +54,19 @@ def register():
 
         if error is None:
             try:
-                db.execute(
-                    "INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
+                cur.execute(
+                    "INSERT INTO user (username, email, password) VALUES (%s, %s, %s)",
                     (username, emails, generate_password_hash(password)),
                 )
                 db.commit()
 
-                user = db.execute(
-                    'SELECT * FROM user WHERE username = ?', (username,)
-                ).fetchone()
+                cur.execute(
+                    'SELECT * FROM user WHERE username = %s', (username,)
+                )
+                user = cur.fetchone()
 
                 otp = create_otp(user['id'])
-            except db.IntegrityError:
+            except cur.IntegrityError:
                 error = f"User {username} is already registered."
             else:
                 html = render_template('auth/confirmation_mail.html',otp=otp)
@@ -80,10 +83,13 @@ def login():
         username = request.form['username']
         password = request.form['password']
         db = get_db()
+        cur = db.cursor()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        cur.execute(
+            'SELECT * FROM user WHERE username = %s', (username,)
+        )
+
+        user = cur.fetchone()
 
         if user is None:
             error = 'Incorrect username.'
@@ -104,13 +110,16 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
+    db = get_db()
+    cur = db.cursor()
 
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        cur.execute(
+            'SELECT * FROM user WHERE id = %s', (user_id,)
+        )
+        g.user = cur.fetchone()
 
 @bp.route('/logout')
 def logout():
@@ -121,13 +130,16 @@ def logout():
 def verify_otp(email_s):
     duration = 600
     db = get_db()
-    user = db.execute("SELECT * FROM user WHERE email=?", (email_s,)).fetchone()
+    cur = db.cursor()
+    cur.execute("SELECT * FROM user WHERE email=%s", (email_s,))
+    user = cur.fetchone()
 
     if not user:
         flash("Invalid email for verification.")
         return redirect(url_for("auth.register"))
     
-    record = db.execute("SELECT * FROM otps WHERE id=?", (user['id'],)).fetchone()
+    cur.execute("SELECT * FROM otps WHERE id=%s", (user['id'],))
+    record = cur.fetchone()
     
     if request.method == 'POST':
         otp = request.form['otp']
@@ -135,8 +147,8 @@ def verify_otp(email_s):
             if user['is_registered']:
                 return redirect(url_for("static",filename="auth/login_success.html"))
             else:
-                db.execute(
-                    "UPDATE user SET is_registered = TRUE WHERE id=?", (user['id'],)
+                cur.execute(
+                    "UPDATE user SET is_registered = TRUE WHERE id=%s", (user['id'],)
                 )
                 db.commit()
                 #return redirect(url_for("static",filename="auth/registration_success.html"))

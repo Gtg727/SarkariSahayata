@@ -16,6 +16,7 @@ def index():
 # @login_required
 def add_details():
     db = get_db()
+    cur = db.cursor()
 
     if request.method == 'POST':
         # Fetch form data
@@ -30,8 +31,8 @@ def add_details():
         pan = request.form.get('pan')
 
         # Insert user details
-        db.execute(
-            "INSERT INTO user_details (name, age, gender, income, caste, states, occupation, aadhar, pan, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        cur.execute(
+            "INSERT INTO user_details (name, age, gender, income, caste, states, occupation, aadhar, pan, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         , (name, age, gender, income, caste, state, occupation, aadhar, pan, g.user['id'])),
         db.commit()
 
@@ -47,7 +48,9 @@ def eligibility():
     """Check eligible schemes based on user details."""
     print("hello")
     db = get_db()
-    user = db.execute("SELECT * FROM user_details WHERE user_id=?", (g.user['id'],)).fetchone()
+    cur = db.cursor()
+    cur.execute("SELECT * FROM user_details WHERE user_id=%s", (g.user['id'],))
+    user = cur.fetchone()
 
     if not user:
         flash("Please add your details first.")
