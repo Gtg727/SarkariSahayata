@@ -53,3 +53,69 @@ body{
   .hindi-title{ font-size:1.2rem; }
   .logo{ width:48px; height:48px; }
 }
+
+body {
+  background-color: #f4f6f9;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #1f2937;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 10px;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Benefits list */
+.benefits-list {
+  padding-left: 1.2rem;
+}
+
+.benefits-list li {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Documents Highlight */
+.documents-box {
+  background: linear-gradient(135deg, #fff4db, #fff);
+  border-left: 6px solid #ff9800;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+}
+
+.documents-title {
+  font-weight: 700;
+  color: #e65100;
+  margin-bottom: 0.75rem;
+}
+
+.documents-list {
+  padding-left: 1.2rem;
+  margin-bottom: 0;
+}
+
+.documents-list li {
+  margin-bottom: 0.55rem;
+  font-weight: 500;
+}
+
+/* Back button */
+.btn-outline-secondary {
+  border-radius: 20px;
+  padding: 0.25rem 0.9rem;
+}
+
+/* Footer text */
+small {
+  color: #6b7280;
+}
