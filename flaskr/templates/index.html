@@ -49,7 +49,7 @@
         <a class="nav-link" href="index.html">Home</a>
         <a class="nav-link" href="#categories">Categories</a>
         <a class="nav-link" href="#quick">Quick Access</a>
-        <a class="nav-link" href="#">Chatbot</a>
+        <a class="nav-link" href="{{ url_for('chatbot.chatbot_page') }}">Chatbot</a>
         <a class="nav-link" href="#">Contact</a>
       </div>
     </nav>
@@ -195,7 +195,7 @@
             <i class="bi bi-robot" style="font-size:36px;color:#1e64e6"></i>
             <h5 class="mt-2">AI Assistant</h5>
             <p class="text-muted">Chat in your native language for help</p>
-            <a class="btn btn-primary">Chat Now</a>
+            <a class="btn btn-primary" href="{{ url_for('chatbot.chatbot_page') }}">Chat Now</a>
           </div>
         </div>
         <div class="col-md-4">

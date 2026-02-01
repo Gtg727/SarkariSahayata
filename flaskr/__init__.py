@@ -43,4 +43,7 @@ def create_app(test_config=None):
     from . import categories
     app.register_blueprint(categories.bp)
 
+    from . import chatbot
+    app.register_blueprint(chatbot.bp)
+
     return app
