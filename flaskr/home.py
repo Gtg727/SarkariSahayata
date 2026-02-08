@@ -42,6 +42,19 @@ def add_details():
 
     return render_template('add_details.html')
 
+# creates a dictionary in this format {category0:[scheme,scheme1],category1:[scheme,scheme1]}
+def categorising(schemes):
+    elegibile_scheme = {}
+
+    for s, cond in schemes.items():
+        if cond[0]:
+            if cond[1] in elegibile_scheme:
+                elegibile_scheme[cond[1]].append(s)
+            else:
+                elegibile_scheme[cond[1]] = [s]
+
+    return elegibile_scheme
+
 @bp.route('/eligibility')
 # @login_required
 def eligibility():
@@ -65,22 +78,22 @@ def eligibility():
 
     # Eligibility logic
     schemes = {
-        "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)": occupation == "farmer" and income <= 120000,
-        "Pradhan Mantri Adarsh Gram Yojana (PMAGY)": caste == "sc",
-        "Prime Minister’s Fellowship for Doctoral Research": age <= 42,
-        "Prime Minister Early Career Research Grant (PM ECRG)": age <= 42 and caste in ["sc", "st", "obc"] and gender == "female",
-        "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)": income <= 120000,
-        "Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP)": caste in ["sc", "st"] and gender == "female" and occupation == "divyang",
-        "Pradhan Mantri Awaas Yojana Gramin (PMAY-G)": income <= 10000 and caste in ["sc", "st"] and occupation == "pwd",
-        "Pradhan Mantri Awas Yojana Urban (PMAY-U, CLSS)": income <= 1800000,
-        "Pradhan Mantri Kaushal Vikas Yojana Short Term Training (PMKVY-STT)": 15 <= age <= 45,
-        "Prime Minister’s Employment Generation Programme (PMEGP)": age >= 18,
-        "Mahila Samman Savings Certificate (MSSC)": gender == "female",
-        "Transport Allowance to Differently Abled Persons (Puducherry)": age >= 5 and income <= 75000,
-        "Scheme for Financial Assistance for Veteran Artists (Artists’ Pension)": age >= 60 and income <= 48000
+        "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)": [occupation == "farmer" and income <= 120000,"Agricuture"],
+        "Pradhan Mantri Adarsh Gram Yojana (PMAGY)": [caste == "sc","Housing"],
+        "Prime Minister’s Fellowship for Doctoral Research": [age <= 42,"Education"],
+        "Prime Minister Early Career Research Grant (PM ECRG)": [age <= 42 and caste in ["sc", "st", "obc"] and gender == "female","Education"],
+        "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)": [income <= 120000,"Health"],
+        "Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP)": [caste in ["sc", "st"] and gender == "female" and occupation == "divyang","Health"],
+        "Pradhan Mantri Awaas Yojana Gramin (PMAY-G)": [income <= 10000 and caste in ["sc", "st"] and occupation == "pwd","Housing"],
+        "Pradhan Mantri Awas Yojana Urban (PMAY-U, CLSS)": [income <= 1800000,"Housing"],
+        "Pradhan Mantri Kaushal Vikas Yojana Short Term Training (PMKVY-STT)": [15 <= age <= 45, "Skills and Employment"],
+        "Prime Minister’s Employment Generation Programme (PMEGP)": [age >= 18,"Skills and Employment"],
+        "Mahila Samman Savings Certificate (MSSC)": [gender == "female","Women and Child"],
+        "Transport Allowance to Differently Abled Persons (Puducherry)": [age >= 5 and income <= 75000,"Health"],
+        "Scheme for Financial Assistance for Veteran Artists (Artists’ Pension)": [age >= 60 and income <= 48000,"Skills and Employment"]
     }
 
-    eligible_schemes = [s for s, cond in schemes.items() if cond]
+    eligible_schemes = categorising(schemes)
 
     return render_template(
         "eligibility.html",
