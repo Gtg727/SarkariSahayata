@@ -5,145 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Education — SarkariSahayata</title>
 
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    h2 {
-      font-weight: 600;
-      color: #2c3e50;
-    }
-
-    .back-link {
-      text-decoration: none;
-      font-weight: 500;
-      color: #007bff;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-      color: #0056b3;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      transition: 0.3s ease;
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 0;
-    }
-
-    .icon-edu {
-      color: #0d6efd;
-      font-size: 1.2rem;
-      margin-right: 0.5rem;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="container py-5">
-    <a href="{{ url_for('index') }}" class="back-link mb-4 d-inline-block">
-      <i class="bi bi-arrow-left-circle"></i> Back to Home
-    </a>
+<section class="category-page">
+  <div class="container">
+    <a href="{{ url_for('home.index') }}" class="back-home">← Back to Home</a>
 
-    <h2 class="mb-4">Education & Learning Schemes</h2>
+    <div class="category-header">
+      <h1>Education & Learning</h1>
+      <p>Scholarships, fellowships, and educational support schemes</p>
+    </div>
 
-    <div class="row g-4">
+    <div class="category-grid">
 
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/education/PM-Fellowship-for-Doctoral-Research.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-mortarboard icon-edu"></i>Prime Minister’s Fellowship for Doctoral Research
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/education/PM-Fellowship-for-Doctoral-Research.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-mortarboard"></i></div>
+        <div class="scheme-title">PM Fellowship for Doctoral Research</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/education/PM-Early-Career-Research-Grant.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-journal-text icon-edu"></i>Prime Minister Early Career Research Grant
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/education/PM-USP.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-journal-text icon-edu"></i>Pradhan Mantri Uchchatar Shiksha Protsahan (PM-USP)
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/education/Pre-Matric-Scholarship.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-journal-text icon-edu"></i>Pre-Matric Scholarship
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/education/Pragati-Scholarship-Scheme.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-journal-text icon-edu"></i>Pragati Scholarship Scheme
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/education/Scheduled-Caste-Education.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-journal-text icon-edu"></i>Top Class Education For Scheduled Caste
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/education/Pragati-Scholarship-Scheme.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-journal-bookmark"></i></div>
+        <div class="scheme-title">Pragati Scholarship Scheme</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
     </div>
   </div>
+</section>
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

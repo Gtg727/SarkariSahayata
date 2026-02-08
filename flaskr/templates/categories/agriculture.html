@@ -5,286 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agriculture — SarkariSahayata</title>
 
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    h2 {
-      font-weight: 600;
-      color: #2c3e50;
-    }
-
-    .back-btn {
-      text-decoration: none;
-      font-weight: 500;
-      color: #007bff;
-    }
-
-    .back-btn:hover {
-      text-decoration: underline;
-      color: #0056b3;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      transition: 0.3s;
-    }
-
-    .card-title {
-      margin-bottom: 0;
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="container py-5">
-    <a href="{{ url_for('index') }}" class="back-btn mb-4 d-inline-block">
-      <i class="bi bi-arrow-left-circle"></i> Back to Home
+<section class="category-page">
+  <div class="container">
+    <a href="{{ url_for('home.index') }}" class="back-home">
+      ← Back to Home
     </a>
 
-    <h2 class="mb-4">Agriculture, Rural & Environment Schemes</h2>
+    <div class="category-header">
+      <h1>Agriculture & Rural Schemes</h1>
+      <p>Government schemes supporting farmers, irrigation, crops, and rural development</p>
+    </div>
 
-    <div class="row g-4">
+    <div class="category-grid">
 
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/PM-Kisan-Samman-Nidhi.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Pradhan Mantri Kisan Samman Nidhi
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/agriculture/PM-Kisan-Samman-Nidhi.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-flower1"></i></div>
+        <div class="scheme-title">PM Kisan Samman Nidhi</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
+      <a href="{{ url_for('static', filename='schemes/agriculture/pm_fasal_bima_yojana.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-shield-check"></i></div>
+        <div class="scheme-title">PM Fasal Bima Yojana</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
+      <a href="{{ url_for('static', filename='schemes/agriculture/kisan_credit_card.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-credit-card"></i></div>
+        <div class="scheme-title">Kisan Credit Card</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/pmksy_per_drop_more_crop.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Pradhan Mantri Krishi Sinchayee Yojana: Per Drop More Crop
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/pm_kisan_samman_nidhi.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Pradhan Mantri Kisan Samman Nidhi
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/pm_fasal_bima_yojana.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Pradhan Mantri Fasal Bima Yojna (PMFBY)
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/pmksy_har_khet_ko_pani.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Pradhan Mantri Har Khet Ko Pani Yojna
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/rashtriya_krishi_vikas_yojana.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Rashtriya Krishi Vikas Yojana 
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/paramparagat_krishi_vikas_yojana.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Paramparagat Krishi Vikas Yojana 
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/national_food_security_mission.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>National Food Security Mission
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/pok_chhamb_assistance.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Central Assistance For One Time Settlement Of Displaced Families From PoK And Chhamb Under Prime Minister's Development Package
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/kisan_credit_card.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Kisan Credit Card
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/development_support_coffee_water_aug.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Development Support for Coffee in Traditional Areas: Water Augmentation
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/national_mission_on_natural_farming.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>National Mission on Natural Farming
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/national_bamboo_mission.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>National Bamboo Mission
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/rashtriya_gram_swaraj_abhiyan.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Rashtriya Gram Swaraj Abhiyan
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/sub_mission_on_agriculture_mechanization.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Sub Mission on Agriculture Mechanization
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/agricultural_marketing_infrastructure.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>Agriculture Marketing Infrastructure 
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/national_livestock_mission.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-flower1 me-2"></i>National Livestock Mission 
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/agriculture/PM-Adarsh-Gram-Yojana .html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-house-door me-2"></i>Pradhan Mantri Adarsh Gram Yojana
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/agriculture/national_food_security_mission.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-basket"></i></div>
+        <div class="scheme-title">National Food Security Mission</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
     </div>
   </div>
+</section>
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

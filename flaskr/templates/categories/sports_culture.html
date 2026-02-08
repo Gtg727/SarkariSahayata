@@ -1,99 +1,42 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sports & Culture — SarkariSahayata</title>
 
-  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    h2 {
-      font-weight: 600;
-      color: #2c3e50;
-    }
-
-    .back-link {
-      text-decoration: none;
-      font-weight: 500;
-      color: #007bff;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-      color: #0056b3;
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .icon {
-      color: #0d6efd;
-      margin-right: 8px;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease-in-out;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="container py-5">
-    <a href="{{ url_for('index') }}" class="back-link mb-4 d-inline-block">
-      <i class="bi bi-arrow-left-circle"></i> Back to Home
-    </a>
+<section class="category-page">
+  <div class="container">
+    <a href="{{ url_for('home.index') }}" class="back-home">← Back to Home</a>
 
-    <h2 class="mb-4">Sports & Culture Schemes</h2>
+    <div class="category-header">
+      <h1>Sports & Culture</h1>
+      <p>Schemes supporting sports talent, artists, and cultural heritage</p>
+    </div>
 
-    <div class="row g-4">
+    <div class="category-grid">
 
-      <!-- Card 1 -->
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/sports_culture/Free-Education-For-Sports-Medal-Winners-or-Participants-Of-National-International-Event.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-trophy-fill icon"></i>Free Education for Sports Medal Winners / National & International Participants
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/sports_culture/Free-Education-For-Sports-Medal-Winners-or-Participants-Of-National-International-Event.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-trophy"></i></div>
+        <div class="scheme-title">Free Education for Sports Achievers</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
-      <!-- Card 2 -->
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/sports_culture/Scheme-For-Financial-Assistance-For-Veteran-Artists.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-person-arms-up icon"></i>Financial Assistance Scheme for Veteran Artists
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/sports_culture/Scheme-For-Financial-Assistance-For-Veteran-Artists.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-palette"></i></div>
+        <div class="scheme-title">Financial Assistance for Veteran Artists</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
     </div>
   </div>
+</section>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

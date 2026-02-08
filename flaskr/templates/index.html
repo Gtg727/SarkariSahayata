@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SarkariSahayata</title> <!-- ✅ Changed Title -->
+  <title>SarkariSahayata</title>
 
   <!-- Bootstrap + icons + fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,241 +13,153 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <div class="top-strip"></div>
 
-  <!-- header -->
-  <header class="bg-white shadow-sm">
-    <div class="container d-flex align-items-center justify-content-between py-3">
-      <a class="d-flex align-items-center text-decoration-none" href="index.html">
-        <img src="/static/images/logo.png" alt="logo" class="logo me-3">
-        <div>
-          <div class="site-title">SarkariSahayata</div>
-          <div class="site-sub">सरकारी सहायता — Multilingual Smart Portal</div>
-        </div>
-      </a>
+<!-- 🇮🇳 TOP STRIP -->
+<div class="top-strip"></div>
 
-      <div class="d-flex align-items-center gap-2">
-        <select id="langSelect" class="form-select form-select-sm me-2">
-          <option>English</option>
-          <option>हिंदी</option>
-          <option>मराठी</option>
-          <option>ગુજરાતી</option>
-        </select>
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-inner">
+    <a href="{{ url_for('home.index') }}" class="brand">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
+      <div>
+        <div class="site-title">SarkariSahayata</div>
+        <div class="site-sub">सरकारी सहायता — Smart Schemes Portal</div>
+      </div>
+    </a>
 
+    <div class="header-actions">
+      <select class="form-select form-select-sm lang-select">
+        <option>English</option>
+        <option>हिंदी</option>
+        <option>मराठी</option>
+        <option>ગુજરાતી</option>
+      </select>
+
+      {% if g.user %}
+        <span class="welcome">Hi, {{ g.user['username'] }}</span>
+        <a class="btn btn-outline-dark btn-sm" href="{{ url_for('auth.logout') }}">Logout</a>
+      {% else %}
+        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('auth.login') }}">Login</a>
+        <a class="btn btn-success btn-sm" href="{{ url_for('auth.register') }}">Register</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="main-nav">
+    <div class="container">
+      <a href="{{ url_for('home.index') }}">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#quick">Services</a>
+      <a href="{{ url_for('chatbot.chatbot_page') }}">AI Assistant</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero-modern">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <h1>
+        One Platform. Every Government Scheme.<br>
+        <span>Personalized for You.</span>
+      </h1>
+      <p>
+        Discover, check eligibility, and apply for government benefits easily
+        in your language.
+      </p>
+
+      <div class="hero-buttons">
         {% if g.user %}
-          <p>Welcome, {{g.user['username']}}</p>
-          <a class="btn" href="{{ url_for('auth.logout') }}">Logout</a>
+          <a href="{{ url_for('home.eligibility') }}" class="btn-primary">Check Eligibility</a>
         {% else %}
-          <a class="btn btn-outline-primary me-2" href="{{ url_for('auth.login') }}"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
-          <a class="btn btn-success" href="{{ url_for('auth.register') }}"><i class="bi bi-pencil-square"></i> Register</a>
+          <a href="{{ url_for('auth.login') }}" class="btn-primary">Sign In to Check</a>
         {% endif %}
+        <a href="#categories" class="btn-secondary">Explore Schemes</a>
       </div>
-    </div>
-
-    <nav class="nav-blue">
-      <div class="container d-flex gap-4 align-items-center">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="#categories">Categories</a>
-        <a class="nav-link" href="#quick">Quick Access</a>
-        <a class="nav-link" href="{{ url_for('chatbot.chatbot_page') }}">Chatbot</a>
-        <a class="nav-link" href="#">Contact</a>
-      </div>
-    </nav>
-  </header>
-
-  <!-- hero -->
- <main>
-    <section class="hero d-flex align-items-center">
-      <div class="hero-overlay"></div>
-      <div class="container text-white text-center hero-content">
-        <h1 class="display-5 fw-bold">SarkariSahayata</h1>
-        <h3 class="fw-semibold hindi-title">सरकारी सहायता</h3>
-        <p class="lead mt-3">Your one-stop multilingual portal for Government schemes — find eligibility, benefits, and apply online in your language.</p>
-        <div class="mt-4">
-          {% if g.user %}
-            {% if details %}
-              <a class="btn btn-primary btn-lg me-2" href="{{ url_for('home.eligibility') }}">
-                <i class="bi bi-search"></i> Find My Schemes
-              </a>
-            {% else %}
-              <a class="btn btn-primary btn-lg me-2" href="{{ url_for('home.add_details') }}">
-                <i class="bi bi-pencil-square"></i> Add Your Details First
-              </a>
-            {% endif %}
-          {% else %}
-            <a class="btn btn-primary btn-lg me-2" href="{{ url_for('auth.login') }}">
-              <i class="bi bi-box-arrow-in-right"></i> Sign In to Check
-            </a>
-          {% endif %}
-          <a class="btn btn-outline-light btn-lg" href="#"><i class="bi bi-play-circle"></i> Watch Demo</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- categories -->
-    <section id="categories" class="container mt-5">
-  <h2 class="text-center">Categories | सेवाओं के प्रकार</h2>
-  <p class="text-center text-muted">Click a category to explore relevant government schemes</p>
-
-  <div class="row g-4 mt-3">
-    <!-- Agriculture -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.agriculture') }}">
-        <img src="{{ url_for('static', filename='images/agriculture.jpg') }}" alt="Agriculture" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Agriculture, Rural & Environment</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Education -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.education') }}">
-        <img src="{{ url_for('static', filename='images/education.jpg') }}" alt="Education" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Education & Learning</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Women and Child -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.women_child') }}">
-        <img src="{{ url_for('static', filename='images/women_child.jpg') }}" alt="Women and Child" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Women & Child</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Transport -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.transport') }}">
-        <img src="{{ url_for('static', filename='images/transport.jpg') }}" alt="Transport" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Transport & Infrastructure</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Sports & Culture -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.sports_culture') }}">
-        <img src="{{ url_for('static', filename='images/sports_culture.jpg') }}" alt="Sports and Culture" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Sports & Culture</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Housing -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.housing') }}">
-        <img src="{{ url_for('static', filename='images/housing.jpg') }}" alt="Housing" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Housing & Shelter</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Health -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.health') }}">
-        <img src="{{ url_for('static', filename='images/health.jpg') }}" alt="Health" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Health & Wellness</h5>
-        </div>
-      </a>
-    </div>
-
-    <!-- Skills -->
-    <div class="col-md-3">
-      <a class="card category-card text-decoration-none" href="{{ url_for('categories.skills') }}">
-        <img src="{{ url_for('static', filename='images/skills.jpg') }}" alt="Skills" class="card-img-top">
-        <div class="card-body text-center">
-          <h5>Skills & Employment</h5>
-        </div>
-      </a>
     </div>
   </div>
 </section>
 
-    <!-- quick access -->
-    <section id="quick" class="container mt-5">
-      <h2 class="text-center">Quick Access Services</h2>
-      <div class="row g-4 mt-3">
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm text-center">
-            <i class="bi bi-check2-circle" style="font-size:36px;color:#10b981"></i>
-            <h5 class="mt-2">Eligibility Check</h5>
-            <p class="text-muted">Quickly check which schemes you qualify for</p>
-            {% if g.user %}
-              
-                <a class="btn btn-success" href="{{ url_for('home.eligibility') }}">Check Eligibility</a>
-              
-            {% else %}
-              <a class="btn btn-success" href="{{ url_for('auth.login') }}">Sign In First</a>
-            {% endif %}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm text-center">
-            <i class="bi bi-robot" style="font-size:36px;color:#1e64e6"></i>
-            <h5 class="mt-2">AI Assistant</h5>
-            <p class="text-muted">Chat in your native language for help</p>
-            <a class="btn btn-primary" href="{{ url_for('chatbot.chatbot_page') }}">Chat Now</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 shadow-sm text-center">
-            <i class="bi bi-file-earmark-check" style="font-size:36px;color:#374151"></i>
-            <h5 class="mt-2">Application Status</h5>
-            <p class="text-muted">Track your application status</p>
-            <a class="btn btn-dark">Track Application</a>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- HOW IT WORKS -->
+<section class="section">
+  <h2>How It Works</h2>
+  <p class="section-sub">Simple steps to access government benefits</p>
 
+  <div class="card-grid">
+    <div class="info-card">Register</div>
+    <div class="info-card">Check Eligibility</div>
+    <div class="info-card">Discover Schemes</div>
+    <div class="info-card">Apply & Track</div>
+  </div>
+</section>
 
-    <!-- cta -->
-    <section class="cta-band mt-5 text-center text-white py-5">
-      <div class="container">
-        <h3>Ready to Explore Government Benefits?</h3>
-        <p class="mb-4">Join millions of Indians who have already benefited from government schemes.</p>
-        <a class="btn btn-success btn-lg me-3" href="/register.html"><i class="bi bi-person-plus"></i> Register Now</a>
-        <a class="btn btn-outline-light btn-lg" href="#"><i class="bi bi-download"></i> Download Brochure</a>
-      </div>
-    </section>
-  </main>
+<!-- CATEGORIES -->
+<section id="categories" class="section bg-soft">
+  <h2>Explore by Category</h2>
+  <p class="section-sub">Find schemes tailored to your needs</p>
 
-  <!-- footer -->
-  <footer class="footer-dark mt-4">
-    <div class="container py-4">
-      <div class="row">
-        <div class="col-md-4">
-          <h6>Contact</h6>
-          <p class="small mb-1">Helpline: 1800-111-999</p>
-          <p class="small mb-0">help@sarkarisahayata.gov.in</p>
-        </div>
-        <div class="col-md-4">
-          <h6>Popular Schemes</h6>
-          <ul class="list-unstyled small">
-            <li>PM Kisan Yojana</li>
-            <li>PMAY Housing</li>
-            <li>Ayushman Bharat</li>
-          </ul>
-        </div>
-        <div class="col-md-4 text-md-end">
-          <h6>Development</h6>
-          <p class="small mb-0">Your College / Team Name</p>
-          <p class="small">© 2024 SarkariSahayata (Demo)</p>
-        </div>
-      </div>
+  <div class="card-grid">
+    <a class="info-card" href="{{ url_for('categories.agriculture') }}">🌾 Agriculture</a>
+    <a class="info-card" href="{{ url_for('categories.education') }}">🎓 Education</a>
+    <a class="info-card" href="{{ url_for('categories.women_child') }}">👩‍👧 Women & Child</a>
+    <a class="info-card" href="{{ url_for('categories.health') }}">❤️ Health</a>
+    <a class="info-card" href="{{ url_for('categories.housing') }}">🏠 Housing</a>
+    <a class="info-card" href="{{ url_for('categories.skills') }}">🛠 Skills & Employment</a>
+  </div>
+</section>
+
+<!-- QUICK ACCESS -->
+<section id="quick" class="section">
+  <h2>Quick Access Services</h2>
+
+  <div class="card-grid">
+    <div class="info-card">
+      Eligibility Check
+      <a class="link-btn" href="{{ url_for('home.eligibility') }}">Start →</a>
     </div>
-  </footer>
+    <div class="info-card">
+      AI Assistant
+      <a class="link-btn" href="{{ url_for('chatbot.chatbot_page') }}">Chat →</a>
+    </div>
+    <div class="info-card">
+      Application Status
+      <span class="text-muted">(Coming Soon)</span>
+    </div>
+  </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<!-- CTA -->
+<section class="cta-modern">
+  <h2>Ready to Explore Government Benefits?</h2>
+  <p>Join millions of Indians already benefiting from schemes.</p>
+  <a href="{{ url_for('auth.register') }}" class="btn-primary">Register Now</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer-dark">
+  <div class="container footer-grid">
+    <div>
+      <h6>Contact</h6>
+      <p>1800-111-999</p>
+      <p>help@sarkarisahayata.gov.in</p>
+    </div>
+    <div>
+      <h6>Popular Schemes</h6>
+      <p>PM Kisan</p>
+      <p>Ayushman Bharat</p>
+      <p>PMAY</p>
+    </div>
+    <div>
+      <h6>Development</h6>
+      <p>Your College / Team</p>
+      <p>© 2024 SarkariSahayata</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
