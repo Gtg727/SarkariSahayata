@@ -1,149 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Women & Child — SarkariSahayata</title>
 
-  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    h2 {
-      font-weight: 600;
-      color: #2c3e50;
-    }
-
-    .back-link {
-      text-decoration: none;
-      font-weight: 500;
-      color: #007bff;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-      color: #0056b3;
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .icon {
-      color: #d63384;
-      margin-right: 8px;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease-in-out;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="container py-5">
-    <a href="{{ url_for('index') }}" class="back-link mb-4 d-inline-block">
-      <i class="bi bi-arrow-left-circle"></i> Back to Home
-    </a>
+<section class="category-page">
+  <div class="container">
+    <a href="{{ url_for('home.index') }}" class="back-home">← Back to Home</a>
 
-    <h2 class="mb-4">Women & Child Welfare Schemes</h2>
+    <div class="category-header">
+      <h1>Women & Child Welfare</h1>
+      <p>Schemes focused on women empowerment and child development</p>
+    </div>
 
-    <div class="row g-4">
+    <div class="category-grid">
 
-      <!-- Scheme 1 -->
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/women_child/Mahila-Samman-Savings-Certificate.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-piggy-bank icon"></i> Mahila Samman Savings Certificate
-              </h5>
-              <p class="text-muted small mb-0">A government-backed savings scheme for women offering attractive interest rates.</p>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/women_child/Mahila-Samman-Savings-Certificate.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-piggy-bank"></i></div>
+        <div class="scheme-title">Mahila Samman Savings Certificate</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
-      <!-- Scheme 2 -->
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/women_child/Savitribai-Jyotirao-Phule-Fellowship-For-Single-Girl-Child.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-people icon"></i> Indira Gandhi National Widow Pension Scheme
-              </h5>
-              <p class="text-muted small mb-0">A flagship program for early childhood care, nutrition, and pre-school education.</p>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/women_child/Pradhan-Mantri-Ujjwala-Yojana-2_0.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-fire"></i></div>
+        <div class="scheme-title">Pradhan Mantri Ujjwala Yojana</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/women_child/Pradhan-Mantri-Ujjwala-Yojana-2_0.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-piggy-bank icon"></i> Pradhan Mantri Ujjwala Yojana 2.0
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/women_child/National-Scheme-of-Incentive-to-Girls-for-Secondary-Education.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-people icon"></i> National Scheme of Incentive to Girls for Secondary Education
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/women_child/Savitribai-Jyotirao-Phule-Fellowship-For-Single-Girl-Child.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-piggy-bank icon"></i> Savitribai Jyotirao Phule Fellowship For Single Girl Child
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-6">
-        <a href="{{ url_for('static', filename='schemes/women_child/Technology-Development-&-Utilization-Programme-for-Women.html') }}" class="card-link">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="bi bi-people icon"></i> Technology Development & Utilization Programme for Women
-              </h5>
-            </div>
-          </div>
-        </a>
-      </div>
+      <a href="{{ url_for('static', filename='schemes/women_child/Savitribai-Jyotirao-Phule-Fellowship-For-Single-Girl-Child.html') }}" class="scheme-card">
+        <div class="scheme-icon"><i class="bi bi-people"></i></div>
+        <div class="scheme-title">Savitribai Phule Fellowship</div>
+        <span class="scheme-link">Explore →</span>
+      </a>
 
     </div>
   </div>
+</section>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
