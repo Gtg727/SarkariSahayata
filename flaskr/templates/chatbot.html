@@ -1,159 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SarkariSahayata AI Assistant</title>
+<meta charset="UTF-8">
+<title>SarkariSahayata AI</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+:root {
+  --gov-blue: #1e3a8a;
+  --gov-saffron: #f97316;
+  --gov-green: #15803d;
+  --light-bg: #f8fafc;
+}
 
-  <style>
-    body {
-      background: #f4f6f8;
-      font-family: "Poppins", Arial, sans-serif;
-    }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-    .chat-container {
-      max-width: 500px;
-      margin: 50px auto;
-    }
+/* Main card */
+.chat-wrapper {
+  width: 100%;
+  max-width: 880px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
 
-    .chat-card {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
+/* Header */
+.chat-header {
+  padding: 16px 20px;
+  background: linear-gradient(90deg, var(--gov-blue), var(--gov-green));
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .chat-header {
-      background: linear-gradient(90deg, #1e64e6, #10b981);
-      color: white;
-      padding: 15px;
-      font-weight: bold;
-      text-align: center;
-    }
+.chat-header span {
+  font-size: 13px;
+  opacity: 0.9;
+  font-weight: 400;
+}
 
-    .chat-body {
-      height: 350px;
-      overflow-y: auto;
-      padding: 15px;
-      background: #ffffff;
-    }
+/* Chat body */
+.chat-body {
+  flex: 1;
+  padding: 22px;
+  overflow-y: auto;
+  background: var(--light-bg);
+}
 
-    .user-msg {
-      text-align: right;
-      margin-bottom: 10px;
-    }
+/* Messages */
+.message {
+  max-width: 75%;
+  padding: 12px 15px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-size: 15px;
+}
 
-    .bot-msg {
-      text-align: left;
-      margin-bottom: 10px;
-    }
+.user {
+  background: #e0f2fe;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
 
-    .user-msg span {
-      display: inline-block;
-      background: #1e64e6;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 15px 15px 0 15px;
-      max-width: 80%;
-    }
+.bot {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-bottom-left-radius: 4px;
+}
 
-    .bot-msg span {
-      display: inline-block;
-      background: #f1f5f9;
-      color: #333;
-      padding: 8px 12px;
-      border-radius: 15px 15px 15px 0;
-      max-width: 80%;
-    }
+/* Footer */
+.chat-footer {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+}
 
-    .chat-footer {
-      display: flex;
-      padding: 10px;
-      background: #f9fafb;
-    }
+.chat-footer input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  outline: none;
+}
 
-    .chat-footer input {
-      flex: 1;
-      border-radius: 20px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      outline: none;
-    }
+.chat-footer input:focus {
+  border-color: var(--gov-blue);
+}
 
-    .chat-footer button {
-      margin-left: 10px;
-      border-radius: 20px;
-      padding: 10px 20px;
-      background: #1e64e6;
-      color: white;
-      border: none;
-    }
+/* Buttons */
+button {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
 
-    .chat-footer button:hover {
-      background: #174bb5;
-    }
-  </style>
+/* Mic */
+#micBtn {
+  background: #e5e7eb;
+}
+
+#micBtn.listening {
+  background: var(--gov-saffron);
+  color: white;
+}
+
+/* Send */
+#sendBtn {
+  background: var(--gov-green);
+  color: white;
+}
+
+#sendBtn:hover {
+  opacity: 0.9;
+}
+</style>
 </head>
+
 <body>
 
-<div class="container chat-container">
-  <div class="chat-card">
-    
-    <!-- Header -->
-    <div class="chat-header">
-      💬 SarkariSahayata AI Assistant
-    </div>
+<div class="chat-wrapper">
 
-    <!-- Chat Body -->
-    <div class="chat-body" id="chatBox">
-      <div class="bot-msg">
-        <span>Hello! I’m your SarkariSahayata assistant. Ask me about schemes, eligibility, or required documents.</span>
-      </div>
-    </div>
-
-    <!-- Input Area -->
-    <div class="chat-footer">
-      <input type="text" id="userInput" placeholder="Type your question here..." />
-      <button onclick="sendMessage()">Send</button>
-    </div>
-
+  <!-- Header -->
+  <div class="chat-header">
+    🏛️ SarkariSahayata AI
+    <span>Official Government Scheme Assistant</span>
   </div>
+
+  <!-- Chat -->
+  <div class="chat-body" id="chatBox">
+    <div class="message bot">
+      Welcome to <b>SarkariSahayata AI</b> 🇮🇳  
+      Ask me about government schemes, eligibility, or benefits.
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="chat-footer">
+    <input id="userInput" placeholder="Type or speak your question…" />
+    <button id="micBtn" onclick="toggleMic()">🎤</button>
+    <button id="sendBtn" onclick="sendMessage()">Send</button>
+  </div>
+
 </div>
 
 <script>
+let recognition;
+let listening = false;
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.onresult = e => {
+    userInput.value = e.results[0][0].transcript;
+  };
+  recognition.onend = () => {
+    listening = false;
+    micBtn.classList.remove("listening");
+  };
+}
+
+function toggleMic() {
+  if (!recognition) {
+    addMessage(
+      "🎤 Voice input is supported on Google Chrome or Microsoft Edge.",
+      "bot"
+    );
+    return;
+  }
+
+  listening ? recognition.stop() : recognition.start();
+  listening = !listening;
+  micBtn.classList.toggle("listening");
+}
+
 function sendMessage() {
-  let input = document.getElementById("userInput");
-  let chatBox = document.getElementById("chatBox");
+  const text = userInput.value.trim();
+  if (!text) return;
 
-  let message = input.value.trim();
-  if (!message) return;
+  addMessage(text, "user");
+  userInput.value = "";
 
-  // Show user message
-  let userDiv = document.createElement("div");
-  userDiv.className = "user-msg";
-  userDiv.innerHTML = `<span>${message}</span>`;
-  chatBox.appendChild(userDiv);
-
-  // Send to Flask API
   fetch("/chatbot/api", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ message: message })
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ message: text })
   })
-  .then(response => response.json())
-  .then(data => {
-    let botDiv = document.createElement("div");
-    botDiv.className = "bot-msg";
-    botDiv.innerHTML = `<span>${data.reply}</span>`;
-    chatBox.appendChild(botDiv);
+  .then(r => r.json())
+  .then(d => addMessage(d.reply, "bot"));
+}
 
-    chatBox.scrollTop = chatBox.scrollHeight;
-  });
-
-  input.value = "";
+function addMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = `message ${type}`;
+  div.innerHTML = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 </script>
 
