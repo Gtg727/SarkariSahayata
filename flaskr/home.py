@@ -1,4 +1,7 @@
 import functools
+import json
+import os
+
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -8,16 +11,16 @@ from flaskr.db import get_db
 
 bp = Blueprint('home', __name__)
 
-import json
-import os
-
+# =====================================================
+# HOME PAGE — LOAD ADMIN JSON SCHEMES SAFELY
+# =====================================================
 @bp.route("/")
 def index():
-    schemes = []
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    DATA_FILE = os.path.join(BASE_DIR, "data", "schemes.json")
 
     try:
-        data_file = os.path.join("data", "schemes.json")
-        with open(data_file, "r") as f:
+        with open(DATA_FILE, "r") as f:
             schemes = json.load(f)
     except Exception:
         schemes = []
@@ -25,14 +28,15 @@ def index():
     return render_template("index.html", json_schemes=schemes)
 
 
+# =====================================================
+# ADD USER DETAILS
+# =====================================================
 @bp.route('/add-details', methods=['GET', 'POST'])
-# @login_required
 def add_details():
     db = get_db()
     cur = db.cursor()
 
     if request.method == 'POST':
-        # Fetch form data
         name = request.form.get('name')
         age = request.form.get('age')
         gender = request.form.get('gender')
@@ -43,10 +47,17 @@ def add_details():
         aadhar = request.form.get('aadhar')
         pan = request.form.get('pan')
 
-        # Insert user details
         cur.execute(
-            "INSERT INTO user_details (name, age, gender, income, caste, states, occupation, aadhar, pan, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        , (name, age, gender, income, caste, state, occupation, aadhar, pan, g.user['id'])),
+            """
+            INSERT INTO user_details
+            (name, age, gender, income, caste, states, occupation, aadhar, pan, user_id)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            """,
+            (
+                name, age, gender, income, caste,
+                state, occupation, aadhar, pan, g.user['id']
+            )
+        )
         db.commit()
 
         flash("User details submitted successfully!")
@@ -55,11 +66,12 @@ def add_details():
 
     return render_template('add_details.html')
 
+
+# =====================================================
+# ELIGIBILITY CHECK
+# =====================================================
 @bp.route('/eligibility')
-# @login_required
 def eligibility():
-    """Check eligible schemes based on user details."""
-    print("hello")
     db = get_db()
     cur = db.cursor()
     cur.execute("SELECT * FROM user_details WHERE user_id=%s", (g.user['id'],))
@@ -69,14 +81,12 @@ def eligibility():
         flash("Please add your details first.")
         return redirect(url_for('home.add_details'))
 
-    # Extract user data
     age = int(user['age'] or 0)
     gender = (user['gender'] or "").lower()
     income = int(user['income'] or 0)
     caste = (user['caste'] or "").lower()
     occupation = (user['occupation'] or "").lower()
 
-    # Eligibility logic
     schemes = {
         "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)": occupation == "farmer" and income <= 120000,
         "Pradhan Mantri Adarsh Gram Yojana (PMAGY)": caste == "sc",
@@ -86,7 +96,7 @@ def eligibility():
         "Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP)": caste in ["sc", "st"] and gender == "female" and occupation == "divyang",
         "Pradhan Mantri Awaas Yojana Gramin (PMAY-G)": income <= 10000 and caste in ["sc", "st"] and occupation == "pwd",
         "Pradhan Mantri Awas Yojana Urban (PMAY-U, CLSS)": income <= 1800000,
-        "Pradhan Mantri Kaushal Vikas Yojana Short Term Training (PMKVY-STT)": 15 <= age <= 45,
+        "Pradhan Mantri Kaushal Vikas Yojana (PMKVY-STT)": 15 <= age <= 45,
         "Prime Minister’s Employment Generation Programme (PMEGP)": age >= 18,
         "Mahila Samman Savings Certificate (MSSC)": gender == "female",
         "Transport Allowance to Differently Abled Persons (Puducherry)": age >= 5 and income <= 75000,

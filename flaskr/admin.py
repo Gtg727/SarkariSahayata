@@ -7,7 +7,15 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 ADMIN_USERNAME = "sarkariadmin1"
 ADMIN_PASSWORD = "sarkari123"
 
-DATA_FILE = os.path.join("data", "schemes.json")
+# ================= SAFE PATH SETUP =================
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DATA_FILE = os.path.join(BASE_DIR, "data", "schemes.json")
+
+# Ensure data file exists
+if not os.path.exists(DATA_FILE):
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    with open(DATA_FILE, "w") as f:
+        json.dump([], f)
 
 # ---------------- ADMIN LOGIN ----------------
 @admin_bp.route("/login", methods=["GET", "POST"])
@@ -29,6 +37,10 @@ def admin_dashboard():
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin.admin_login"))
 
+    # Load existing schemes
+    with open(DATA_FILE, "r") as f:
+        schemes = json.load(f)
+
     if request.method == "POST":
         scheme = {
             "title": request.form.get("title"),
@@ -38,15 +50,12 @@ def admin_dashboard():
             "eligibility": request.form.get("eligibility")
         }
 
-        with open(DATA_FILE, "r") as f:
-            data = json.load(f)
-
-        data.append(scheme)
+        schemes.append(scheme)
 
         with open(DATA_FILE, "w") as f:
-            json.dump(data, f, indent=2)
+            json.dump(schemes, f, indent=2)
 
-    return render_template("admin_dashboard.html")
+    return render_template("admin_dashboard.html", schemes=schemes)
 
 
 # ---------------- LOGOUT ----------------
