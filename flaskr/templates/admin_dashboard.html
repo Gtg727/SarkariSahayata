@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-bg">
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h2>Add New Scheme</h2>
+
+    <form method="POST">
+      <input class="auth-field" name="title" placeholder="Scheme Title" required>
+      <input class="auth-field" name="category" placeholder="Category (Agriculture, Health...)" required>
+      <textarea class="auth-field" name="description" placeholder="Description"></textarea>
+      <textarea class="auth-field" name="benefits" placeholder="Benefits"></textarea>
+      <textarea class="auth-field" name="eligibility" placeholder="Eligibility"></textarea>
+
+      <button class="auth-btn">Save Scheme</button>
+    </form>
+
+    <div class="auth-footer">
+      <a href="{{ url_for('admin.admin_logout') }}">Logout</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

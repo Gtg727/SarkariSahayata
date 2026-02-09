@@ -8,9 +8,22 @@ from flaskr.db import get_db
 
 bp = Blueprint('home', __name__)
 
-@bp.route('/')
+import json
+import os
+
+@bp.route("/")
 def index():
-    return render_template('index.html')
+    schemes = []
+
+    try:
+        data_file = os.path.join("data", "schemes.json")
+        with open(data_file, "r") as f:
+            schemes = json.load(f)
+    except Exception:
+        schemes = []
+
+    return render_template("index.html", json_schemes=schemes)
+
 
 @bp.route('/add-details', methods=['GET', 'POST'])
 # @login_required

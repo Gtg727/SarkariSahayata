@@ -1,8 +1,10 @@
 import os
 import functools
 from flask_mail import Mail
-from flask import Flask
+from flask import Flask, app
 from flask_mysqldb import MySQL
+
+from flaskr import admin
 
 mail = Mail()
 mysql = MySQL()
@@ -45,5 +47,8 @@ def create_app(test_config=None):
 
     from . import chatbot
     app.register_blueprint(chatbot.bp)
+
+    from . import admin
+    app.register_blueprint(admin.admin_bp)
 
     return app

@@ -101,6 +101,27 @@
   <h2>Explore by Category</h2>
   <p class="section-sub">Find schemes tailored to your needs</p>
 
+  {% if json_schemes %}
+<section class="section">
+  <h2>Recently Added Schemes</h2>
+  <p class="section-sub">Added by administrator</p>
+
+  <div class="card-grid">
+    {% for scheme in json_schemes %}
+      <div class="info-card">
+        <strong>{{ scheme.title }}</strong>
+        <p class="text-muted mt-2">
+          {{ scheme.description }}
+        </p>
+        <span class="badge bg-success">
+          {{ scheme.category }}
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
   <div class="card-grid">
     <a class="info-card" href="{{ url_for('categories.agriculture') }}">🌾 Agriculture</a>
     <a class="info-card" href="{{ url_for('categories.education') }}">🎓 Education</a>
@@ -143,22 +164,28 @@
   <div class="container footer-grid">
     <div>
       <h6>Contact</h6>
-      <p>1800-111-999</p>
       <p>help@sarkarisahayata.gov.in</p>
     </div>
+
     <div>
       <h6>Popular Schemes</h6>
       <p>PM Kisan</p>
       <p>Ayushman Bharat</p>
-      <p>PMAY</p>
     </div>
+
     <div>
-      <h6>Development</h6>
-      <p>Your College / Team</p>
-      <p>© 2024 SarkariSahayata</p>
+      <h6>Administration</h6>
+      <a href="{{ url_for('admin.admin_login') }}"
+         style="color:#22c55e;text-decoration:none;font-weight:600">
+        Admin Login
+      </a>
+      <p style="margin-top:10px;font-size:.85rem">
+        © 2024 SarkariSahayata
+      </p>
     </div>
   </div>
 </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
