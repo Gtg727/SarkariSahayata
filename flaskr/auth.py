@@ -1,6 +1,34 @@
 import functools
 import time
 import random
+import re
+
+def validate_password(password, username):
+
+    if len(password) < 8:
+        return "Password must be at least 8 characters long."
+
+    if re.search(r"\s", password):
+        return "Password must not contain spaces."
+
+    if not re.search(r"[A-Z]", password):
+        return "Password must contain at least one uppercase letter."
+
+    if not re.search(r"[a-z]", password):
+        return "Password must contain at least one lowercase letter."
+
+    if not re.search(r"[0-9]", password):
+        return "Password must contain at least one number."
+
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return "Password must contain at least one special character."
+    
+    if password.lower() == username.lower():
+        return "Password cannot be same as username."
+
+
+    return None
+
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -51,6 +79,10 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        else:
+            error = validate_password(password, username)
+
+
 
         if error is None:
             try:
@@ -168,3 +200,4 @@ def login_required(f):
         return f(**kwargs)
 
     return wrapped_view
+
