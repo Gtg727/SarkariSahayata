@@ -1,42 +1,43 @@
 import os
-import functools
 from flask_mail import Mail
-from flask import Flask, app
+from flask import Flask
 from flask_mysqldb import MySQL
-
-from flaskr import admin
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 mail = Mail()
 mysql = MySQL()
 
+# Create limiter globally (NOT inside function)
+limiter = Limiter(key_func=get_remote_address)
+
 def create_app(test_config=None):
-    # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+
     app.config.from_mapping(
-        SECRET_KEY='dev'
+        SECRET_KEY='dev'  # Change in production
     )
 
     if test_config is None:
-        # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
     else:
-        # load the test config if passed in
         app.config.from_mapping(test_config)
 
-    # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
 
-    from . import auth
-    app.register_blueprint(auth.bp)
-
+    # Initialize extensions
     mail.init_app(app)
     mysql.init_app(app)
-    
+    limiter.init_app(app)  # IMPORTANT: Initialize limiter here
+
     from . import db
     db.init_app(app)
+
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     from . import home
     app.register_blueprint(home.bp)
