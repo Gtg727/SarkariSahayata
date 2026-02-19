@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login - SarkariSahayata</title>
 
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Main CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
   <style>
@@ -24,63 +21,13 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    .auth-wrapper {
-      width: 100%;
-      max-width: 420px;
-      color: #e5e7eb;
-    }
-
-    .auth-brand {
-      text-align: center;
-      margin-bottom: 22px;
-    }
-
-    .auth-brand h2 {
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .auth-brand p {
-      font-size: 0.9rem;
-      color: #94a3b8;
-    }
-
+    .auth-wrapper { max-width: 420px; width:100%; color:#e5e7eb; }
     .auth-card {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.06);
       backdrop-filter: blur(14px);
       border-radius: 16px;
       padding: 28px;
       box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-    }
-
-    .auth-card h4 {
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-
-    .auth-card small {
-      display: block;
-      text-align: center;
-      color: #94a3b8;
-      margin-bottom: 18px;
-    }
-
-    .trust-badges {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      font-size: 0.75rem;
-      color: #22c55e;
-      margin-bottom: 18px;
-    }
-
-    .form-label {
-      font-size: 0.85rem;
-      color: #cbd5f5;
-      margin-bottom: 4px;
     }
 
     .form-control {
@@ -91,10 +38,6 @@
       border-radius: 10px;
     }
 
-    .form-control::placeholder {
-      color: #94a3b8;
-    }
-
     .form-control:focus {
       background: rgba(255,255,255,0.12);
       box-shadow: none;
@@ -102,91 +45,90 @@
     }
 
     .login-btn {
-      width: 100%;
-      border: none;
-      margin-top: 12px;
-      padding: 13px;
-      font-weight: 600;
-      border-radius: 999px;
-      color: #fff;
-      background: linear-gradient(90deg, #f97316, #22c55e);
+      width:100%;
+      padding:13px;
+      border:none;
+      border-radius:999px;
+      font-weight:600;
+      color:#fff;
+      background:linear-gradient(90deg,#f97316,#22c55e);
     }
 
-    .login-btn:hover {
-      opacity: 0.95;
+    .password-toggle {
+      position:absolute;
+      right:15px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:18px;
+      color:#94a3b8;
     }
 
-    .auth-footer {
-      text-align: center;
-      margin-top: 16px;
-      font-size: 0.85rem;
-    }
-
-    .auth-footer a {
-      color: #22c55e;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .back-home {
-      display: block;
-      text-align: center;
-      margin-top: 22px;
-      font-size: 0.85rem;
-      color: #94a3b8;
-      text-decoration: none;
-    }
-
-    .back-home:hover {
-      color: #ffffff;
-    }
+    .password-toggle:hover { color:#fff; }
   </style>
 </head>
 
 <body>
 
-  <div class="auth-wrapper">
+<div class="auth-wrapper">
 
-    <!-- Brand -->
-    <div class="auth-brand">
-      <h2>SarkariSahayata</h2>
-      <p>Smart Government Schemes Portal</p>
-    </div>
-
-    <!-- Card -->
-    <div class="auth-card">
-
-      <h4>Welcome Back</h4>
-      <small>Sign in to access your dashboard</small>
-
-      <div class="trust-badges">
-        <span>🔒 Secure</span>
-        <span>✔ Verified</span>
-        <span>🏛 Government</span>
-      </div>
-
-      <form id="loginForm" action="#" method="POST">
-
-        <label class="form-label">Username</label>
-        <input name="username" type="text" class="form-control mb-3" placeholder="your username" required>
-
-        <label class="form-label">Password</label>
-        <input name="password" type="password" class="form-control mb-3" placeholder="enter your password" required>
-
-        <button class="login-btn">
-          Sign In Securely →
-        </button>
-      </form>
-
-      <div class="auth-footer">
-        New to SarkariSahayata?
-        <a href="{{ url_for('auth.register') }}">Create Account</a>
-      </div>
-    </div>
-
-    <a class="back-home" href="{{ url_for('index') }}">← Back to homepage</a>
-
+  <div class="auth-brand text-center mb-3">
+    <h2>SarkariSahayata</h2>
+    <p>Smart Government Schemes Portal</p>
   </div>
+
+  <div class="auth-card">
+
+    <h4 class="text-center">Welcome Back</h4>
+    <small class="d-block text-center mb-3">Sign in to access your dashboard</small>
+
+    <form method="POST">
+
+      <label class="form-label">Username</label>
+      <input name="username" type="text" class="form-control mb-3" placeholder="your username" required>
+
+      <label class="form-label">Password</label>
+
+      <div class="position-relative mb-3">
+        <input id="loginPassword" name="password" type="password"
+               class="form-control"
+               placeholder="enter your password" required>
+
+        <i class="bi bi-eye-slash password-toggle"
+           onclick="togglePassword('loginPassword', this)"></i>
+      </div>
+
+      <button class="login-btn">
+        Sign In Securely →
+      </button>
+    </form>
+
+    <div class="auth-footer text-center mt-3">
+      New to SarkariSahayata?
+      <a href="{{ url_for('auth.register') }}">Create Account</a>
+    </div>
+  </div>
+
+  <a class="back-home d-block text-center mt-3"
+     href="{{ url_for('index') }}">← Back to homepage</a>
+
+</div>
+
+<script>
+function togglePassword(fieldId, icon) {
+    const field = document.getElementById(fieldId);
+
+    if (field.type === "password") {
+        field.type = "text";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    } else {
+        field.type = "password";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    }
+}
+</script>
 
 </body>
 </html>

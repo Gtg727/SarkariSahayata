@@ -18,13 +18,11 @@
 <div class="auth-wrapper">
   <div class="auth-card">
 
-    <!-- Brand -->
     <div class="auth-brand text-center mb-3">
       <h2>Sarkari Sahayata</h2>
       <p>Create your secure account</p>
     </div>
 
-    <!-- Progress -->
     <div class="auth-steps">
       <div class="step active">Account</div>
       <div class="step">Verification</div>
@@ -33,7 +31,6 @@
 
     <h5 class="text-center mt-4 mb-3">Create Account</h5>
 
-    <!-- Flash messages -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
@@ -44,7 +41,6 @@
       {% endif %}
     {% endwith %}
 
-    <!-- Form -->
     <form method="POST">
 
       <div class="auth-field">
@@ -57,9 +53,13 @@
         <input name="email" type="email" placeholder="Email address" required>
       </div>
 
-      <div class="auth-field">
+      <!-- UPDATED PASSWORD FIELD -->
+      <div class="auth-field position-relative">
         <i class="bi bi-lock"></i>
-        <input name="password" type="password" placeholder="Create password" required>
+        <input id="registerPassword" name="password" type="password" placeholder="Create password" required>
+
+        <i class="bi bi-eye-slash password-toggle"
+           onclick="togglePassword('registerPassword', this)"></i>
       </div>
 
       <button type="submit" class="auth-btn">
@@ -85,6 +85,37 @@
     <a href="{{ url_for('index') }}" class="back-home">← Back to homepage</a>
   </div>
 </div>
+
+<script>
+function togglePassword(fieldId, icon) {
+    const field = document.getElementById(fieldId);
+
+    if (field.type === "password") {
+        field.type = "text";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    } else {
+        field.type = "password";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    }
+}
+</script>
+
+<style>
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #6c757d;
+}
+.password-toggle:hover {
+    color: #000;
+}
+</style>
 
 </body>
 </html>
