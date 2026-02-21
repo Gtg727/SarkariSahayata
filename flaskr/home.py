@@ -1,122 +1,185 @@
-import functools
-import json
-import os
-
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect,
+    render_template, request, url_for, abort
 )
-from werkzeug.exceptions import abort
-
 from flaskr.db import get_db
+import MySQLdb.cursors
 
-bp = Blueprint('home', __name__)
 
 # =====================================================
-# HOME PAGE — LOAD ADMIN JSON SCHEMES SAFELY
+# Blueprint
+# =====================================================
+bp = Blueprint('home', __name__)
+
+
+# =====================================================
+# HOME PAGE
 # =====================================================
 @bp.route("/")
 def index():
-    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    DATA_FILE = os.path.join(BASE_DIR, "data", "schemes.json")
 
-    try:
-        with open(DATA_FILE, "r") as f:
-            schemes = json.load(f)
-    except Exception:
-        schemes = []
+    db = get_db()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
 
-    return render_template("index.html", json_schemes=schemes)
+    cursor.execute("SELECT * FROM schemes ORDER BY id DESC")
+    schemes = cursor.fetchall()
+
+    return render_template("index.html", schemes=schemes)
+
+
+# =====================================================
+# SCHEME DETAIL PAGE
+# =====================================================
+@bp.route('/scheme/<int:scheme_id>')
+def scheme_detail(scheme_id):
+
+    db = get_db()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT * FROM schemes WHERE id=%s", (scheme_id,))
+    scheme = cursor.fetchone()
+
+    if not scheme:
+        abort(404)
+
+    return render_template("scheme_detail.html", scheme=scheme)
 
 
 # =====================================================
 # ADD USER DETAILS
 # =====================================================
-@bp.route('/add-details', methods=['GET', 'POST'])
+@bp.route("/add-details", methods=["GET", "POST"])
 def add_details():
+
+    if not g.user:
+        return redirect(url_for("auth.login"))
+
     db = get_db()
-    cur = db.cursor()
+    cursor = db.cursor()
 
-    if request.method == 'POST':
-        name = request.form.get('name')
-        age = request.form.get('age')
-        gender = request.form.get('gender')
-        income = request.form.get('income')
-        caste = request.form.get('caste')
-        state = request.form.get('state')
-        occupation = request.form.get('occupation')
-        aadhar = request.form.get('aadhar')
-        pan = request.form.get('pan')
+    if request.method == "POST":
 
-        cur.execute(
-            """
+        name = request.form.get("name")
+        age = request.form.get("age")
+        gender = request.form.get("gender")
+        income = request.form.get("income")
+        caste = request.form.get("caste")
+        state = request.form.get("state")
+        occupation = request.form.get("occupation")
+        aadhar = request.form.get("aadhar")
+        pan = request.form.get("pan")
+
+        cursor.execute("""
             INSERT INTO user_details
-            (name, age, gender, income, caste, states, occupation, aadhar, pan, user_id)
+            (name, age, gender, income, caste, states,
+             occupation, aadhar, pan, user_id)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            """,
-            (
-                name, age, gender, income, caste,
-                state, occupation, aadhar, pan, g.user['id']
-            )
-        )
+        """, (
+            name, age, gender, income, caste,
+            state, occupation, aadhar, pan, g.user["id"]
+        ))
+
         db.commit()
-
         flash("User details submitted successfully!")
-        g.details = True
-        return redirect(url_for('home.index'))
 
-    return render_template('add_details.html')
+        return redirect(url_for("home.index"))
 
-# creates a dictionary in this format {category0:[scheme,scheme1],category1:[scheme,scheme1]}
-def categorising(schemes):
-    elegibile_scheme = {}
+    return render_template("add_details.html")
 
-    for s, cond in schemes.items():
-        if cond[0]:
-            if cond[1] in elegibile_scheme:
-                elegibile_scheme[cond[1]].append(s)
-            else:
-                elegibile_scheme[cond[1]] = [s]
 
-    return elegibile_scheme
-
-@bp.route('/eligibility')
+# =====================================================
+# ELIGIBILITY ENGINE (FULLY DATABASE DRIVEN)
+# =====================================================
+@bp.route("/eligibility")
 def eligibility():
+
+    if not g.user:
+        return redirect(url_for("auth.login"))
+
     db = get_db()
-    cur = db.cursor()
-    cur.execute("SELECT * FROM user_details WHERE user_id=%s", (g.user['id'],))
-    user = cur.fetchone()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
+
+    # Get user details
+    cursor.execute("""
+        SELECT * FROM user_details
+        WHERE user_id = %s
+    """, (g.user["id"],))
+
+    user = cursor.fetchone()
 
     if not user:
         flash("Please add your details first.")
-        return redirect(url_for('home.add_details'))
+        return redirect(url_for("home.add_details"))
 
-    age = int(user['age'] or 0)
-    gender = (user['gender'] or "").lower()
-    income = int(user['income'] or 0)
-    caste = (user['caste'] or "").lower()
-    occupation = (user['occupation'] or "").lower()
+    age = int(user["age"] or 0)
+    gender = (user["gender"] or "").lower()
+    income = int(user["income"] or 0)
+    caste = (user["caste"] or "").lower()
+    state = (user["states"] or "").lower()
+    occupation = (user["occupation"] or "").lower()
 
-    schemes = {
-        "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)": [occupation == "farmer" and income <= 120000,"Agricuture"],
-        "Pradhan Mantri Adarsh Gram Yojana (PMAGY)": [caste == "sc","Housing"],
-        "Prime Minister’s Fellowship for Doctoral Research": [age <= 42,"Education"],
-        "Prime Minister Early Career Research Grant (PM ECRG)": [age <= 42 and caste in ["sc", "st", "obc"] and gender == "female","Education"],
-        "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)": [income <= 120000,"Health"],
-        "Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP)": [caste in ["sc", "st"] and gender == "female" and occupation == "divyang","Health"],
-        "Pradhan Mantri Awaas Yojana Gramin (PMAY-G)": [income <= 10000 and caste in ["sc", "st"] and occupation == "pwd","Housing"],
-        "Pradhan Mantri Awas Yojana Urban (PMAY-U, CLSS)": [income <= 1800000,"Housing"],
-        "Pradhan Mantri Kaushal Vikas Yojana Short Term Training (PMKVY-STT)": [15 <= age <= 45, "Skills and Employment"],
-        "Prime Minister’s Employment Generation Programme (PMEGP)": [age >= 18,"Skills and Employment"],
-        "Mahila Samman Savings Certificate (MSSC)": [gender == "female","Women and Child"],
-        "Transport Allowance to Differently Abled Persons (Puducherry)": [age >= 5 and income <= 75000,"Health"],
-        "Scheme for Financial Assistance for Veteran Artists (Artists’ Pension)": [age >= 60 and income <= 48000,"Skills and Employment"]
-    }
+    # Get all schemes
+    cursor.execute("SELECT * FROM schemes")
+    schemes = cursor.fetchall()
 
-    eligible_schemes = categorising(schemes)
+    eligible_schemes = []
+    rejected_schemes = []
+
+    for scheme in schemes:
+
+        is_eligible = True
+        reasons = []
+
+        # ---------------- AGE CHECK ----------------
+        if scheme["min_age"] and age < scheme["min_age"]:
+            is_eligible = False
+            reasons.append(f"Minimum age required is {scheme['min_age']}")
+
+        if scheme["max_age"] and age > scheme["max_age"]:
+            is_eligible = False
+            reasons.append(f"Maximum age allowed is {scheme['max_age']}")
+
+        # ---------------- INCOME CHECK ----------------
+        if scheme["max_income"] and income > scheme["max_income"]:
+            is_eligible = False
+            reasons.append(f"Income must be ≤ ₹{scheme['max_income']}")
+
+        # ---------------- GENDER CHECK ----------------
+        if scheme["gender"] and scheme["gender"].lower() != gender:
+            is_eligible = False
+            reasons.append(f"Only for {scheme['gender']} candidates")
+
+        # ---------------- CASTE CHECK ----------------
+        if scheme["caste"] and scheme["caste"].lower() != caste:
+            is_eligible = False
+            reasons.append(f"Only for {scheme['caste']} category")
+
+        # ---------------- STATE CHECK ----------------
+        if scheme["state"] and scheme["state"].lower() != state:
+            is_eligible = False
+            reasons.append(f"Only available in {scheme['state']}")
+
+        # ---------------- OCCUPATION CHECK ----------------
+        if scheme["occupation"] and scheme["occupation"].lower() != occupation:
+            is_eligible = False
+            reasons.append(f"Only for {scheme['occupation']} occupation")
+
+        # ---------------- FINAL RESULT ----------------
+        if is_eligible:
+            eligible_schemes.append({
+                "scheme": scheme,
+                "reason": "All eligibility criteria satisfied"
+            })
+        else:
+            rejected_schemes.append({
+                "scheme": scheme,
+                "reasons": reasons
+            })
 
     return render_template(
         "eligibility.html",
-        name=user['name'],
+        name=user["name"],
         eligible_schemes=eligible_schemes,
+        rejected_schemes=rejected_schemes,
         scheme_count=len(eligible_schemes)
     )
