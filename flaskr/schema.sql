@@ -65,3 +65,15 @@ CREATE TABLE schemes (
   benefits TEXT,
   eligibility TEXT
 );
+
+ ALTER TABLE schemes
+ADD COLUMN objectives TEXT,
+ADD COLUMN application_process TEXT,
+ADD COLUMN documents TEXT,
+ADD COLUMN min_age INT,
+ADD COLUMN max_age INT,
+ADD COLUMN max_income INT,
+ADD COLUMN gender VARCHAR(50),
+ADD COLUMN caste VARCHAR(50),
+ADD COLUMN state VARCHAR(100),
+ADD COLUMN occupation VARCHAR(100);
