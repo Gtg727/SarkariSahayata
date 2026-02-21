@@ -12,26 +12,18 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_mapping(
-        SECRET_KEY=os.getenv("SECRET_KEY", "dev"),
-
-        MYSQL_HOST=os.getenv("MYSQL_HOST", "localhost"),
-        MYSQL_USER=os.getenv("MYSQL_USER", "root"),
-        MYSQL_PASSWORD=os.getenv("MYSQL_PASSWORD", "shushant@2006"),
-        MYSQL_DB=os.getenv("MYSQL_DB", "sarkari_sahayata"),
-
-        MAIL_SERVER="smtp.gmail.com",
-        MAIL_PORT=587,
-        MAIL_USE_TLS=True,
-        MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
-        MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
-        MAIL_DEFAULT_SENDER=os.getenv("MAIL_USERNAME"),
+        SECRET_KEY='dev'
     )
 
-    if test_config:
-        app.config.update(test_config)
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
 
     try:
-        os.makedirs(app.instance_path, exist_ok=True)
+        os.makedirs(app.instance_path)
     except OSError:
         pass
 
@@ -41,20 +33,20 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    # Register Blueprints
-    from .auth import bp as auth_bp
-    app.register_blueprint(auth_bp)
+    from . import auth
+    app.register_blueprint(auth.bp)
 
-    from .home import bp as home_bp
-    app.register_blueprint(home_bp)
+    from . import home
+    app.register_blueprint(home.bp)
+    app.add_url_rule('/', endpoint='index')
 
-    from .categories import bp as categories_bp
-    app.register_blueprint(categories_bp)
+    from . import categories
+    app.register_blueprint(categories.bp)
 
-    from .chatbot import bp as chatbot_bp
-    app.register_blueprint(chatbot_bp)
+    from . import chatbot
+    app.register_blueprint(chatbot.bp)
 
-    from .admin import admin_bp
-    app.register_blueprint(admin_bp)
+    from . import admin
+    app.register_blueprint(admin.admin_bp)
 
     return app
