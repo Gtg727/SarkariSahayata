@@ -17,7 +17,8 @@ CREATE TABLE user (
   username VARCHAR(100) UNIQUE NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(200) NOT NULL,
-  is_registered BOOLEAN DEFAULT FALSE
+  is_registered BOOLEAN DEFAULT FALSE,
+  user_type VARCHAR(15) DEFAULT "user"
 );
 
 

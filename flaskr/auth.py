@@ -65,9 +65,10 @@ def register():
                 user = cur.fetchone()
 
                 otp = create_otp(user['id'])
+                print(otp)
 
-                html = render_template('auth/confirmation_mail.html', otp=otp)
-                email.send_email(user['email'], "OTP Verification", html, mail)
+                #html = render_template('auth/confirmation_mail.html', otp=otp)
+                #email.send_email(user['email'], "OTP Verification", html, mail)
 
                 return redirect(url_for("auth.verify_otp", email_s=user['email']))
 

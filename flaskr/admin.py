@@ -4,35 +4,31 @@ import MySQLdb.cursors
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
-ADMIN_USERNAME = "sarkariadmin1"
-ADMIN_PASSWORD = "sarkari123"
-
-
 # =========================
 # ADMIN LOGIN
-# =========================
-@admin_bp.route("/login", methods=["GET", "POST"])
-def admin_login():
+# # =========================
+# @admin_bp.route("/login", methods=["GET", "POST"])
+# def admin_login():
 
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+#     if request.method == "POST":
+#         username = request.form.get("username")
+#         password = request.form.get("password")
 
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-            session["admin_logged_in"] = True
-            return redirect(url_for("admin.admin_dashboard"))
+#         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+#             session["admin_logged_in"] = True
+#             return redirect(url_for("admin.admin_dashboard"))
 
-    return render_template("admin_login.html")
+#     return render_template("admin_login.html")
 
 
 # =========================
 # ADMIN DASHBOARD
 # =========================
-@admin_bp.route("/dashboard", methods=["GET", "POST"])
+@admin_bp.route("/admin_page", methods=["GET", "POST"])
 def admin_dashboard():
 
-    if not session.get("admin_logged_in"):
-        return redirect(url_for("admin.admin_login"))
+    #if not session.get("admin_logged_in"):
+    #    return redirect(url_for("admin.admin_login"))
 
     db = get_db()
     cursor = db.cursor(MySQLdb.cursors.DictCursor)
@@ -97,11 +93,10 @@ def admin_dashboard():
 
     return render_template("admin_dashboard.html", schemes=schemes)
 
-
 # =========================
 # LOGOUT
 # =========================
-@admin_bp.route("/logout")
-def admin_logout():
-    session.pop("admin_logged_in", None)
-    return redirect(url_for("admin.admin_login"))
+# @admin_bp.route("/logout")
+# def admin_logout():
+#     session.pop("admin_logged_in", None)
+#     return redirect(url_for("admin.admin_login"))
