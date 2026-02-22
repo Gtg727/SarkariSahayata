@@ -58,8 +58,10 @@ def create_master():
     cur = db.cursor()
     cfg =current_app.config
 
+    cur.execute("ALTER TABLE user ADD user_type VARCHAR(15) DEFAULT 'user';")
     cur.execute("INSERT INTO user (username,email,password,user_type,is_registered) VALUES (%s,%s,%s,%s,1)",
                 (cfg.get('MASTER_USER'),cfg.get('MAIL_USERNAME'),generate_password_hash(cfg.get('MASTER_PASSWORD')),"master"))
+    cur.close() 
 
 
 @click.command('init-db')
