@@ -93,6 +93,79 @@ def admin_dashboard():
 
     return render_template("admin_dashboard.html", schemes=schemes)
 
+@admin_bp.route("/dashboard")
+def info_dashboard():
+    db = get_db()
+    cur = db.cursor()
+
+    gender = []
+
+    try:
+        cur.execute("select count(*) from user_details where gender = %s",('Male',))
+        male = cur.fetchone()
+        gender.append(male['count(*)'])
+    except:
+        male = 0
+        gender.append(male)
+  
+    try:
+        print("yay")
+        cur.execute("select count(*) from user_details where gender = %s",('Female',))
+        female = cur.fetchone()
+        gender.append(female['count(*)'])
+    except:
+        female = 0
+        gender.append(female)
+    
+    cur.execute("select count(*) from user")
+    registered_no = cur.fetchone()
+    cur.execute("select count(*) from user_details")
+    info_no = cur.fetchone()
+    cur.execute("select count(*) from schemes")
+    total_schemes = cur.fetchone()
+    
+    categories = ['Education', 'Health', 'Agriculture', 'Skills and Employment', 'Housing', 'Women and Child']
+    cat_count = []
+
+    for c in categories:
+        cur.execute("select count(*) from schemes where category = %s",(c,))
+        temp = cur.fetchone()
+        cat_count.append(temp['count(*)'])
+
+    cur.close()
+
+    return render_template("admin/dashboard.html", 
+                           gender_data=gender,
+                           registrations=registered_no['count(*)'],
+                           info=info_no['count(*)'],
+                           total_schemes=total_schemes['count(*)'],
+                           cat_list=cat_count
+                           )
+
+@admin_bp.route("/view_user", methods=['GET', 'POST'])
+def view_user():
+    db = get_db()
+    cur = db.cursor()
+
+    # if request.method =='POST':
+    #     name = request.args.get("name")
+    #     print(name)
+
+    #     cur.execute("select user_type from user where username = %s",(name,))
+    #     types = cur.fetchone()
+
+    #     if types['user_type'] == 'user':
+    #         cur.execute("UPDATE user set user_type = %s where username = %s",('admin',name,))
+    #     elif types['user_type'] == 'admin':
+    #         cur.execute("UPDATE user set user_type = %s where username = %s",('user',name,))
+
+    #     cur.commit()
+
+    cur.execute("select * from user")
+
+    users = cur.fetchall()
+
+    return render_template("admin/view_users.html",users=users)
 # =========================
 # LOGOUT
 # =========================
