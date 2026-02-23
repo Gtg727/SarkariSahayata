@@ -22,20 +22,16 @@ body {
   height: 100vh;
 }
 
-/* Main card */
 .chat-wrapper {
   width: 100%;
-  
   height: 100vh;
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  
   box-shadow: 0 20px 40px rgba(0,0,0,0.12);
   overflow: hidden;
 }
 
-/* Header */
 .chat-header {
   padding: 16px 20px;
   background: linear-gradient(90deg, var(--gov-blue), var(--gov-green));
@@ -52,7 +48,6 @@ body {
   font-weight: 400;
 }
 
-/* Chat body */
 .chat-body {
   flex: 1;
   padding: 22px;
@@ -60,7 +55,6 @@ body {
   background: var(--light-bg);
 }
 
-/* Messages */
 .message {
   max-width: 75%;
   padding: 12px 15px;
@@ -83,13 +77,13 @@ body {
   border-bottom-left-radius: 4px;
 }
 
-/* Footer */
 .chat-footer {
   display: flex;
   gap: 10px;
   padding: 14px;
   border-top: 1px solid #e5e7eb;
   background: #ffffff;
+  position: relative;
 }
 
 .chat-footer input {
@@ -105,7 +99,6 @@ body {
   border-color: var(--gov-blue);
 }
 
-/* Buttons */
 button {
   padding: 12px 14px;
   border-radius: 10px;
@@ -114,7 +107,6 @@ button {
   font-size: 14px;
 }
 
-/* Mic */
 #micBtn {
   background: #e5e7eb;
 }
@@ -124,7 +116,6 @@ button {
   color: white;
 }
 
-/* Send */
 #sendBtn {
   background: var(--gov-green);
   color: white;
@@ -133,6 +124,31 @@ button {
 #sendBtn:hover {
   opacity: 0.9;
 }
+
+/* Suggestions */
+.suggestion-box {
+  position: absolute;
+  bottom: 60px;
+  left: 14px;
+  right: 14px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.suggestion-item:hover {
+  background: #f3f4f6;
+}
 </style>
 </head>
 
@@ -140,30 +156,35 @@ button {
 
 <div class="chat-wrapper">
 
-  <!-- Header -->
   <div class="chat-header">
     🏛️ SarkariSahayata AI
     <span>Official Government Scheme Assistant</span>
   </div>
 
-  <!-- Chat -->
   <div class="chat-body" id="chatBox">
     <div class="message bot">
-      Welcome to <b>SarkariSahayata AI</b> 🇮🇳  
+      Welcome to <b>SarkariSahayata AI</b> 🇮🇳<br>
       Ask me about government schemes, eligibility, or benefits.
     </div>
   </div>
 
-  <!-- Input -->
   <div class="chat-footer">
-    <input id="userInput" placeholder="Type or speak your question…" />
+    <input id="userInput" placeholder="Type or speak your question…" autocomplete="off" />
     <button id="micBtn" onclick="toggleMic()">🎤</button>
     <button id="sendBtn" onclick="sendMessage()">Send</button>
+
+    <!-- Suggestions -->
+    <div id="suggestBox" class="suggestion-box"></div>
   </div>
 
 </div>
 
 <script>
+const chatBox = document.getElementById("chatBox");
+const userInput = document.getElementById("userInput");
+const suggestBox = document.getElementById("suggestBox");
+const micBtn = document.getElementById("micBtn");
+
 let recognition;
 let listening = false;
 
@@ -175,6 +196,7 @@ if (SpeechRecognition) {
   recognition.lang = "en-IN";
   recognition.onresult = e => {
     userInput.value = e.results[0][0].transcript;
+    triggerSuggestions();
   };
   recognition.onend = () => {
     listening = false;
@@ -184,10 +206,7 @@ if (SpeechRecognition) {
 
 function toggleMic() {
   if (!recognition) {
-    addMessage(
-      "🎤 Voice input is supported on Google Chrome or Microsoft Edge.",
-      "bot"
-    );
+    addMessage("🎤 Voice input works best in Chrome or Edge.", "bot");
     return;
   }
 
@@ -202,6 +221,7 @@ function sendMessage() {
 
   addMessage(text, "user");
   userInput.value = "";
+  suggestBox.style.display = "none";
 
   fetch("/chatbot/api", {
     method: "POST",
@@ -219,6 +239,64 @@ function addMessage(text, type) {
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+/* -------------------------
+   SUGGESTION SYSTEM
+-------------------------- */
+
+userInput.addEventListener("input", triggerSuggestions);
+
+function triggerSuggestions() {
+  const text = userInput.value.trim();
+
+  if (text === "") {
+    suggestBox.style.display = "none";
+    suggestBox.innerHTML = "";
+    return;
+  }
+
+  fetch("/chatbot/suggest", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ text: text })
+  })
+  .then(r => r.json())
+  .then(data => {
+    suggestBox.innerHTML = "";
+
+    if (!data.suggestions || data.suggestions.length === 0) {
+      suggestBox.style.display = "none";
+      return;
+    }
+
+    data.suggestions.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "suggestion-item";
+      div.innerText = item;
+      div.onclick = () => {
+        userInput.value = item;
+        suggestBox.style.display = "none";
+      };
+      suggestBox.appendChild(div);
+    });
+
+    suggestBox.style.display = "block";
+  });
+}
+
+/* Hide suggestions when clicking outside */
+document.addEventListener("click", function(event) {
+  if (!event.target.closest(".chat-footer")) {
+    suggestBox.style.display = "none";
+  }
+});
+
+/* Enter key to send */
+userInput.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    sendMessage();
+  }
+});
 </script>
 
 </body>

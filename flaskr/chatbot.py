@@ -1,124 +1,226 @@
+import re
 from flask import Blueprint, render_template, request, jsonify, session
+from flaskr.db import get_db
+import MySQLdb.cursors
 
 bp = Blueprint("chatbot", __name__, url_prefix="/chatbot")
 
-# -----------------------------------
-# Dummy Scheme Database
-# -----------------------------------
-SCHEMES = {
-    "women": [
-        "Beti Bachao Beti Padhao",
-        "Sukanya Samriddhi Yojana",
-        "Mahila Samman Savings Certificate",
-        "Working Women Hostel Scheme",
-        "Pradhan Mantri Ujjwala Yojana",
-        "AICTE Pragati Scholarship for Girls"
-    ],
-    "student": [
-        "National Scholarship Portal (NSP)",
-        "Post Matric Scholarship for SC/ST/OBC",
-        "PM Vidya Lakshmi Education Loan",
-        "AICTE Saksham Scholarship",
-        "Central Sector Scholarship Scheme"
-    ],
-    "farmer": [
-        "PM-KISAN Samman Nidhi",
-        "PM Fasal Bima Yojana",
-        "Kisan Credit Card (KCC)",
-        "Soil Health Card Scheme",
-        "National Agriculture Market (e-NAM)"
-    ],
-    "health": [
-        "Ayushman Bharat Yojana",
-        "Janani Suraksha Yojana",
-        "PM Jan Arogya Yojana",
-        "National Health Mission",
-        "Pradhan Mantri Bhartiya Janaushadhi Pariyojana"
-    ]
-}
 
-# -----------------------------------
-# UI Page
-# -----------------------------------
+# ==========================================
+# CHATBOT PAGE
+# ==========================================
 @bp.route("/")
 def chatbot_page():
     return render_template("chatbot.html")
 
-# -----------------------------------
-# Chatbot API
-# -----------------------------------
+
+# ==========================================
+# MAIN CHAT API
+# ==========================================
 @bp.route("/api", methods=["POST"])
 def chat_api():
-    data = request.get_json(silent=True)
-    if not data or "message" not in data:
-        return jsonify({"reply": "Please type a message."})
 
-    msg = data["message"].lower().strip()
+    data = request.get_json()
+    message = data.get("message", "").strip().lower()
 
-    # Reset
-    if msg == "reset":
-        session.clear()
-        return jsonify({"reply": "🔄 All details cleared. Ask again!"})
+    db = get_db()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
 
-    # Greeting
-    if msg in ["hi", "hello", "hey"]:
-        return jsonify({
-            "reply": (
-                "Hello! 👋\n\n"
-                "Ask me about:\n"
-                "• Women schemes\n"
-                "• Student schemes\n"
-                "• Farmer schemes\n"
-                "• Health schemes\n\n"
-                "Or type: check eligibility"
-            )
-        })
+    # ==========================================================
+    # 1️⃣ CATEGORY SEARCH + COUNT
+    # ==========================================================
+    category_match = re.search(
+        r"(agriculture|education|health|housing|skills|transport|women)",
+        message
+    )
 
-    # Detect scheme category
-    for key in SCHEMES:
-        if key in msg:
-            session["intent"] = key
-            schemes = "\n".join([f"• {s}" for s in SCHEMES[key]])
+    if category_match and "scheme" in message:
+        category = category_match.group(1)
+
+        cursor.execute("""
+            SELECT title FROM schemes
+            WHERE LOWER(category) LIKE %s
+        """, (f"%{category}%",))
+
+        schemes = cursor.fetchall()
+
+        if not schemes:
+            return jsonify({"reply": "No schemes found in this category."})
+
+        # Count Query
+        if "how many" in message:
             return jsonify({
-                "reply": f"📌 {key.capitalize()} Schemes\n\n{schemes}\n\nType: check eligibility"
+                "reply": f"There are <b>{len(schemes)}</b> schemes under <b>{category.title()}</b>."
             })
 
-    # Eligibility
-    if msg == "check eligibility":
-        if "age" not in session:
-            return jsonify({"reply": "Please tell me your age."})
-        if "occupation" not in session:
-            return jsonify({"reply": "Please tell me your occupation."})
-        return show_eligibility()
+        # List Query
+        reply = f"<b>{category.title()} Schemes:</b><br><br>"
+        for scheme in schemes:
+            reply += f"• {scheme['title']}<br>"
 
-    # Age
-    if msg.isdigit():
-        session["age"] = int(msg)
-        return jsonify({"reply": "Got it! Now tell me your occupation."})
-
-    # Occupation
-    if "age" in session and "occupation" not in session:
-        session["occupation"] = msg
-        return show_eligibility()
-
-    return jsonify({"reply": "❓ I didn’t understand. Try typing 'women schemes' or 'reset'."})
+        return jsonify({"reply": reply})
 
 
-def show_eligibility():
-    intent = session.get("intent", "general")
-    age = session.get("age")
-    occupation = session.get("occupation")
+    # ==========================================================
+    # 2️⃣ DOCUMENT QUERY
+    # Example: "documents required for demo scheme"
+    # ==========================================================
+    if "document" in message:
 
-    schemes = SCHEMES.get(intent, [])
-    schemes_text = "\n".join([f"• {s}" for s in schemes])
+        cursor.execute("SELECT title, documents FROM schemes")
+        schemes = cursor.fetchall()
 
+        for scheme in schemes:
+            if scheme["title"].lower() in message:
+                if scheme["documents"]:
+                    formatted = scheme["documents"].replace("\n", "<br>")
+                    return jsonify({
+                        "reply": f"<b>Documents Required for {scheme['title']}:</b><br><br>{formatted}"
+                    })
+                else:
+                    return jsonify({
+                        "reply": f"No document information available for {scheme['title']}."
+                    })
+
+
+    # ==========================================================
+    # 3️⃣ BENEFITS QUERY
+    # ==========================================================
+    if "benefit" in message:
+
+        cursor.execute("SELECT title, benefits FROM schemes")
+        schemes = cursor.fetchall()
+
+        for scheme in schemes:
+            if scheme["title"].lower() in message:
+                if scheme["benefits"]:
+                    formatted = scheme["benefits"].replace("\n", "<br>")
+                    return jsonify({
+                        "reply": f"<b>Benefits of {scheme['title']}:</b><br><br>{formatted}"
+                    })
+                else:
+                    return jsonify({
+                        "reply": f"No benefit information available for {scheme['title']}."
+                    })
+
+
+    # ==========================================================
+    # 4️⃣ ELIGIBILITY FLOW START
+    # ==========================================================
+    if "check eligibility" in message:
+        session["chat_state"] = "ask_age"
+        session["eligibility_data"] = {}
+        return jsonify({"reply": "Please enter your age."})
+
+
+    # ==========================================================
+    # ELIGIBILITY STEP 1 — AGE
+    # ==========================================================
+    if session.get("chat_state") == "ask_age":
+
+        if not message.isdigit():
+            return jsonify({"reply": "Please enter your age in numbers only."})
+
+        session["eligibility_data"]["age"] = int(message)
+        session["chat_state"] = "ask_income"
+
+        return jsonify({"reply": "Please enter your annual income."})
+
+
+    # ==========================================================
+    # ELIGIBILITY STEP 2 — INCOME
+    # ==========================================================
+    if session.get("chat_state") == "ask_income":
+
+        if not message.isdigit():
+            return jsonify({"reply": "Please enter your income in numbers only."})
+
+        session["eligibility_data"]["income"] = int(message)
+        session["chat_state"] = None
+
+        age = session["eligibility_data"]["age"]
+        income = session["eligibility_data"]["income"]
+
+        cursor.execute("""
+            SELECT title FROM schemes
+            WHERE (min_age IS NULL OR min_age <= %s)
+            AND (max_age IS NULL OR max_age >= %s)
+            AND (max_income IS NULL OR max_income >= %s)
+        """, (age, age, income))
+
+        eligible = cursor.fetchall()
+
+        if eligible:
+            reply = "<b>You are eligible for:</b><br><br>"
+            for scheme in eligible:
+                reply += f"• {scheme['title']}<br>"
+        else:
+            reply = "No schemes matched your eligibility criteria."
+
+        return jsonify({"reply": reply})
+
+
+    # ==========================================================
+    # STRICT DEFAULT RESPONSE
+    # ==========================================================
     return jsonify({
-        "reply": (
-            "🧾 Profile Summary\n"
-            f"• Age: {age}\n"
-            f"• Occupation: {occupation}\n\n"
-            "🎯 Eligible Schemes\n"
-            f"{schemes_text}\n\n"
-            "Type: reset to start over"
-        )
+        "reply": """
+I can only help with:
+
+• Category based scheme search  
+• Documents required for a scheme  
+• Benefits of a scheme  
+• Eligibility check  
+
+Please ask a valid supported question.
+"""
     })
+
+
+# ==========================================
+# LIVE QUESTION SUGGESTIONS (DATABASE DRIVEN)
+# ==========================================
+@bp.route("/suggest", methods=["POST"])
+def suggest():
+
+    data = request.get_json()
+    user_input = data.get("text", "").lower().strip()
+
+    if not user_input:
+        return jsonify({"suggestions": []})
+
+    db = get_db()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("SELECT title, category FROM schemes")
+    schemes = cursor.fetchall()
+
+    suggestions = []
+
+    # Category based suggestions
+    categories = set([s["category"].lower() for s in schemes if s["category"]])
+
+    for category in categories:
+        possible = [
+            f"Show {category} schemes",
+            f"How many {category} schemes are there?"
+        ]
+        for q in possible:
+            if user_input in q.lower():
+                suggestions.append(q)
+
+    # Scheme based suggestions
+    for scheme in schemes:
+        title = scheme["title"]
+
+        possible = [
+            f"What documents are required for {title}?",
+            f"What are the benefits of {title}?",
+            f"Check eligibility for {title}"
+        ]
+
+        for q in possible:
+            if user_input in q.lower():
+                suggestions.append(q)
+
+    return jsonify({"suggestions": suggestions[:6]})

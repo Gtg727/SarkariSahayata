@@ -1,43 +1,28 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, abort
+from flaskr.db import get_db
+import MySQLdb.cursors
 
 bp = Blueprint('categories', __name__, url_prefix='/categories')
 
-# Agriculture
-@bp.route('/agriculture')
-def agriculture():
-    return render_template('categories/agriculture.html')
 
-# Education
-@bp.route('/education')
-def education():
-    return render_template('categories/education.html')
+@bp.route('/<category_name>')
+def show_category(category_name):
 
-# Women and Child
-@bp.route('/women_child')
-def women_child():
-    return render_template('categories/women_child.html')
+    db = get_db()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
 
-# Transport & Infrastructure
-@bp.route('/transport')
-def transport():
-    return render_template('categories/transport.html')
+    cursor.execute("""
+        SELECT * FROM schemes
+        WHERE LOWER(category) = LOWER(%s)
+    """, (category_name,))
 
-# Sports & Culture
-@bp.route('/sports_culture')
-def sports_culture():
-    return render_template('categories/sports_culture.html')
+    schemes = cursor.fetchall()
 
-# Housing
-@bp.route('/housing')
-def housing():
-    return render_template('categories/housing.html')
+    if schemes is None:
+        abort(404)
 
-# Health
-@bp.route('/health')
-def health():
-    return render_template('categories/health.html')
-
-# Skills & Employment
-@bp.route('/skills')
-def skills():
-    return render_template('categories/skills.html')
+    return render_template(
+        'category_dynamic.html',
+        category=category_name,
+        schemes=schemes
+    )

@@ -3,6 +3,7 @@ import MySQLdb.cursors
 from flaskr import mysql
 import click
 from flask import current_app, g
+from werkzeug.security import generate_password_hash
 
 def get_db():
     """Get a per-request MySQL connection and reconnect if needed."""
@@ -29,7 +30,6 @@ def connect_db():
         autocommit=True
     )
 
-
 def close_db(e=None):
     """Close the database connection at the end of the request."""
     db = g.pop('db', None)
@@ -38,6 +38,7 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
+    cfg =current_app.config
 
     with current_app.open_resource('schema.sql') as f:
         sql_script = f.read().decode('utf8')
@@ -47,8 +48,21 @@ def init_db():
         stmt = statement.strip()
         if stmt:
             cur.execute(stmt)
+    cur.execute("INSERT INTO user (username,email,password,user_type,is_registered) VALUES (%s,%s,%s,%s,1)",
+                (cfg.get('MASTER_USER'),cfg.get('MAIL_USERNAME'),generate_password_hash(cfg.get('MASTER_PASSWORD')),"master"))
     mysql.connection.commit()
     cur.close()
+
+def create_master():
+    db = get_db()
+    cur = db.cursor()
+    cfg =current_app.config
+
+    cur.execute("ALTER TABLE user ADD user_type VARCHAR(15) DEFAULT 'user';")
+    cur.execute("INSERT INTO user (username,email,password,user_type,is_registered) VALUES (%s,%s,%s,%s,1)",
+                (cfg.get('MASTER_USER'),cfg.get('MAIL_USERNAME'),generate_password_hash(cfg.get('MASTER_PASSWORD')),"master"))
+    cur.close() 
+
 
 @click.command('init-db')
 def init_db_command():
@@ -56,7 +70,13 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
+@click.command('create-master')
+def create_master_command():
+    create_master()
+    click.echo('master created successfully')
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(create_master_command)
 

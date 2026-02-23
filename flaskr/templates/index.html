@@ -54,6 +54,9 @@
       <a href="#quick">Services</a>
       <a href="{{ url_for('chatbot.chatbot_page') }}">AI Assistant</a>
       <a href="#">Contact</a>
+      {% if g.user['user_type'] == 'master' or g.user['user_type'] == 'admin' %}
+        <a href="{{ url_for('admin.admin_dashboard') }}">admin page</a>
+      {% endif %}
     </div>
   </nav>
 </header>
@@ -84,15 +87,37 @@
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="section">
-  <h2>How It Works</h2>
-  <p class="section-sub">Simple steps to access government benefits</p>
+ <section class="py-5">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-4">How It Works</h2>
 
-  <div class="card-grid">
-    <div class="info-card">Register</div>
-    <div class="info-card">Check Eligibility</div>
-    <div class="info-card">Discover Schemes</div>
-    <div class="info-card">Apply & Track</div>
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="p-4 border rounded shadow-sm h-100">
+          <i class="bi bi-person-plus fs-2 text-primary"></i>
+          <h6 class="mt-3">Register</h6>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-4 border rounded shadow-sm h-100">
+          <i class="bi bi-search fs-2 text-success"></i>
+          <h6 class="mt-3">Check Eligibility</h6>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="p-4 border rounded shadow-sm h-100">
+          <i class="bi bi-collection fs-2 text-warning"></i>
+          <h6 class="mt-3">Discover Schemes</h6>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="p-4 border rounded shadow-sm h-100">
+          <i class="bi bi-clipboard-check fs-2 text-danger"></i>
+          <h6 class="mt-3">Apply & Track</h6>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -123,12 +148,12 @@
 {% endif %}
 
   <div class="card-grid">
-    <a class="info-card" href="{{ url_for('categories.agriculture') }}">🌾 Agriculture</a>
-    <a class="info-card" href="{{ url_for('categories.education') }}">🎓 Education</a>
-    <a class="info-card" href="{{ url_for('categories.women_child') }}">👩‍👧 Women & Child</a>
-    <a class="info-card" href="{{ url_for('categories.health') }}">❤️ Health</a>
-    <a class="info-card" href="{{ url_for('categories.housing') }}">🏠 Housing</a>
-    <a class="info-card" href="{{ url_for('categories.skills') }}">🛠 Skills & Employment</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Agriculture') }}">🌾 Agriculture</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Education') }}">🎓 Education</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Women and Child') }}">👩‍👧 Women & Child</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Health') }}">❤️ Health</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Housing') }}">🏠 Housing</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Skills and Employment') }}">🛠 Skills & Employment</a>
   </div>
 </section>
 
@@ -183,7 +208,7 @@
 
     <div>
       <h6>Administration</h6>
-      <a href="{{ url_for('admin.admin_login') }}"
+      <a href="#"
          style="color:#22c55e;text-decoration:none;font-weight:600">
         Admin Login
       </a>
