@@ -19,6 +19,7 @@
       align-items: center;
       justify-content: center;
       font-family: 'Poppins', sans-serif;
+      position: relative;
     }
     .auth-wrapper { width:100%; max-width:420px; color:#e5e7eb; }
     .auth-card {
@@ -58,55 +59,114 @@
     }
 
     .password-toggle:hover { color:#fff; }
+
+    .auth-lang-btn{
+      position:fixed;
+      top:20px;
+      right:20px;
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+    }
   </style>
 </head>
 
 <body>
 
+<button type="button" class="auth-lang-btn" id="openLanguageModal">
+  <i class="bi bi-translate"></i>
+  <span data-i18n="choose_language">Choose Language</span>
+</button>
+
 <div class="auth-wrapper">
 
   <div class="auth-brand text-center mb-3">
-    <h2>SarkariSahayata</h2>
-    <p>Smart Government Schemes Portal</p>
+    <h2 data-i18n="site_title">SarkariSahayata</h2>
+    <p data-i18n="login_portal_sub">Smart Government Schemes Portal</p>
   </div>
 
   <div class="auth-card">
 
-    <h4 class="text-center">Welcome Back</h4>
-    <small class="d-block text-center mb-3">Sign in to access your dashboard</small>
+    <h4 class="text-center" data-i18n="welcome_back">Welcome Back</h4>
+    <small class="d-block text-center mb-3" data-i18n="sign_in_access_dashboard">Sign in to access your dashboard</small>
 
     <form method="POST">
 
-      <label class="form-label">Username</label>
-      <input name="username" type="text" class="form-control mb-3" placeholder="your username" required>
+      <label class="form-label" data-i18n="username">Username</label>
+      <input name="username" type="text" class="form-control mb-3" placeholder="your username" data-i18n-placeholder="your_username" required>
 
-      <label class="form-label">Password</label>
+      <label class="form-label" data-i18n="password">Password</label>
 
       <div class="position-relative mb-3">
         <input id="loginPassword" name="password" type="password"
                class="form-control"
-               placeholder="enter your password" required>
+               placeholder="enter your password" data-i18n-placeholder="enter_your_password" required>
 
         <i class="bi bi-eye-slash password-toggle"
            onclick="togglePassword('loginPassword', this)"></i>
       </div>
 
-      <button class="login-btn">
+      <button class="login-btn" data-i18n="sign_in_securely">
         Sign In Securely →
       </button>
     </form>
 
     <div class="auth-footer text-center mt-3">
-      New to SarkariSahayata?
-      <a href="{{ url_for('auth.register') }}">Create Account</a>
+      <span data-i18n="new_to_sarkari">New to SarkariSahayata?</span>
+      <a href="{{ url_for('auth.register') }}" data-i18n="create_account">Create Account</a>
     </div>
   </div>
 
   <a class="back-home d-block text-center mt-3"
-     href="{{ url_for('index') }}">← Back to homepage</a>
+     href="{{ url_for('index') }}" data-i18n="back_to_homepage">← Back to homepage</a>
 
 </div>
 
+<!-- LANGUAGE MODAL -->
+<div class="lang-modal-overlay" id="langModalOverlay">
+  <div class="lang-modal-box">
+    <div class="lang-modal-header">
+      <div>
+        <h3 data-i18n="choose_language">Choose Language</h3>
+        <p data-i18n="choose_language_sub">Select your preferred language for the portal</p>
+      </div>
+      <button class="lang-close-btn" id="closeLanguageModal">&times;</button>
+    </div>
+
+    <div class="lang-search-wrap">
+      <i class="bi bi-search"></i>
+      <input type="text" id="languageSearch" placeholder="Search language..." data-i18n-placeholder="search_language">
+    </div>
+
+    <div class="lang-grid" id="languageGrid">
+      <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="hi">हिंदी</button>
+      <button class="lang-option" data-lang="mr">मराठी</button>
+      <button class="lang-option" data-lang="gu">ગુજરાતી</button>
+      <button class="lang-option" data-lang="bn">বাংলা</button>
+      <button class="lang-option" data-lang="ta">தமிழ்</button>
+      <button class="lang-option" data-lang="te">తెలుగు</button>
+      <button class="lang-option" data-lang="kn">ಕನ್ನಡ</button>
+      <button class="lang-option" data-lang="ml">മലയാളം</button>
+      <button class="lang-option" data-lang="pa">ਪੰਜਾਬੀ</button>
+      <button class="lang-option" data-lang="or">ଓଡ଼ିଆ</button>
+      <button class="lang-option" data-lang="as">অসমীয়া</button>
+      <button class="lang-option" data-lang="ur">اردو</button>
+      <button class="lang-option" data-lang="ne">नेपाली</button>
+      <button class="lang-option" data-lang="sa">संस्कृत</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script>
 function togglePassword(fieldId, icon) {
     const field = document.getElementById(fieldId);

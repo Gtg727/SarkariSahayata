@@ -23,25 +23,23 @@
     <a href="{{ url_for('home.index') }}" class="brand">
       <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo">
       <div>
-        <div class="site-title">SarkariSahayata</div>
-        <div class="site-sub">सरकारी सहायता — Smart Schemes Portal</div>
+        <div class="site-title" data-i18n="site_title">SarkariSahayata</div>
+        <div class="site-sub" data-i18n="site_sub">सरकारी सहायता — Smart Schemes Portal</div>
       </div>
     </a>
 
     <div class="header-actions">
-      <select class="form-select form-select-sm lang-select">
-        <option>English</option>
-        <option>हिंदी</option>
-        <option>मराठी</option>
-        <option>ગુજરાતી</option>
-      </select>
+      <button type="button" class="lang-trigger-btn" id="openLanguageModal">
+        <i class="bi bi-translate"></i>
+        <span data-i18n="choose_language">Choose Language</span>
+      </button>
 
       {% if g.user %}
-        <span class="welcome">Hi, {{ g.user['username'] }}</span>
-        <a class="btn btn-outline-dark btn-sm" href="{{ url_for('auth.logout') }}">Logout</a>
+        <span class="welcome"><span data-i18n="hi_text">Hi</span>, {{ g.user['username'] }}</span>
+        <a class="btn btn-outline-dark btn-sm" href="{{ url_for('auth.logout') }}" data-i18n="logout">Logout</a>
       {% else %}
-        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('auth.login') }}">Login</a>
-        <a class="btn btn-success btn-sm" href="{{ url_for('auth.register') }}">Register</a>
+        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('auth.login') }}" data-i18n="login">Login</a>
+        <a class="btn btn-success btn-sm" href="{{ url_for('auth.register') }}" data-i18n="register">Register</a>
       {% endif %}
     </div>
   </div>
@@ -49,13 +47,13 @@
   <!-- NAV -->
   <nav class="main-nav">
     <div class="container">
-      <a href="{{ url_for('home.index') }}">Home</a>
-      <a href="#categories">Categories</a>
-      <a href="#quick">Services</a>
-      <a href="{{ url_for('chatbot.chatbot_page') }}">AI Assistant</a>
-      <a href="#">Contact</a>
+      <a href="{{ url_for('home.index') }}" data-i18n="nav_home">Home</a>
+      <a href="#categories" data-i18n="nav_categories">Categories</a>
+      <a href="#quick" data-i18n="nav_services">Services</a>
+      <a href="{{ url_for('chatbot.chatbot_page') }}" data-i18n="nav_ai">AI Assistant</a>
+      <a href="#" data-i18n="nav_contact">Contact</a>
       {% if g.user['user_type'] == 'master' or g.user['user_type'] == 'admin' %}
-        <a href="{{ url_for('admin.admin_dashboard') }}">admin page</a>
+        <a href="{{ url_for('admin.admin_dashboard') }}" data-i18n="nav_admin">admin page</a>
       {% endif %}
     </div>
   </nav>
@@ -66,55 +64,55 @@
   <div class="container hero-grid">
     <div class="hero-text">
       <h1>
-        One Platform. Every Government Scheme.<br>
-        <span>Personalized for You.</span>
+        <span data-i18n="hero_title_line1">One Platform. Every Government Scheme.</span><br>
+        <span data-i18n="hero_title_line2">Personalized for You.</span>
       </h1>
-      <p>
+      <p data-i18n="hero_desc">
         Discover, check eligibility, and apply for government benefits easily
         in your language.
       </p>
 
       <div class="hero-buttons">
         {% if g.user %}
-          <a href="{{ url_for('home.eligibility') }}" class="btn-primary">Check Eligibility</a>
+          <a href="{{ url_for('home.eligibility') }}" class="btn-primary" data-i18n="check_eligibility">Check Eligibility</a>
         {% else %}
-          <a href="{{ url_for('auth.login') }}" class="btn-primary">Sign In to Check</a>
+          <a href="{{ url_for('auth.login') }}" class="btn-primary" data-i18n="sign_in_to_check">Sign In to Check</a>
         {% endif %}
-        <a href="#categories" class="btn-secondary">Explore Schemes</a>
+        <a href="#categories" class="btn-secondary" data-i18n="explore_schemes">Explore Schemes</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
- <section class="py-5">
+<section class="py-5">
   <div class="container text-center">
-    <h2 class="fw-bold mb-4">How It Works</h2>
+    <h2 class="fw-bold mb-4" data-i18n="how_it_works">How It Works</h2>
 
     <div class="row g-4">
       <div class="col-md-3">
         <div class="p-4 border rounded shadow-sm h-100">
           <i class="bi bi-person-plus fs-2 text-primary"></i>
-          <h6 class="mt-3">Register</h6>
+          <h6 class="mt-3" data-i18n="register">Register</h6>
         </div>
       </div>
       <div class="col-md-3">
         <div class="p-4 border rounded shadow-sm h-100">
           <i class="bi bi-search fs-2 text-success"></i>
-          <h6 class="mt-3">Check Eligibility</h6>
+          <h6 class="mt-3" data-i18n="check_eligibility">Check Eligibility</h6>
         </div>
       </div>
       <div class="col-md-3">
         <div class="p-4 border rounded shadow-sm h-100">
           <i class="bi bi-collection fs-2 text-warning"></i>
-          <h6 class="mt-3">Discover Schemes</h6>
+          <h6 class="mt-3" data-i18n="discover_schemes">Discover Schemes</h6>
         </div>
       </div>
 
       <div class="col-md-3">
         <div class="p-4 border rounded shadow-sm h-100">
           <i class="bi bi-clipboard-check fs-2 text-danger"></i>
-          <h6 class="mt-3">Apply & Track</h6>
+          <h6 class="mt-3" data-i18n="apply_track">Apply & Track</h6>
         </div>
       </div>
     </div>
@@ -123,68 +121,68 @@
 
 <!-- CATEGORIES -->
 <section id="categories" class="section bg-soft">
-  <h2>Explore by Category</h2>
-  <p class="section-sub">Find schemes tailored to your needs</p>
+  <h2 data-i18n="explore_by_category">Explore by Category</h2>
+  <p class="section-sub" data-i18n="find_schemes_tailored">Find schemes tailored to your needs</p>
 
   {% if json_schemes %}
-<section class="section">
-  <h2>Recently Added Schemes</h2>
-  <p class="section-sub">Added by administrator</p>
+  <section class="section">
+    <h2 data-i18n="recently_added_schemes">Recently Added Schemes</h2>
+    <p class="section-sub" data-i18n="added_by_admin">Added by administrator</p>
+
+    <div class="card-grid">
+      {% for scheme in json_schemes %}
+        <div class="info-card">
+          <strong>{{ scheme.title }}</strong>
+          <p class="text-muted mt-2">
+            {{ scheme.description }}
+          </p>
+          <span class="badge bg-success">
+            {{ scheme.category }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
   <div class="card-grid">
-    {% for scheme in json_schemes %}
-      <div class="info-card">
-        <strong>{{ scheme.title }}</strong>
-        <p class="text-muted mt-2">
-          {{ scheme.description }}
-        </p>
-        <span class="badge bg-success">
-          {{ scheme.category }}
-        </span>
-      </div>
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
-
-  <div class="card-grid">
-    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Agriculture') }}">🌾 Agriculture</a>
-    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Education') }}">🎓 Education</a>
-    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Women and Child') }}">👩‍👧 Women & Child</a>
-    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Health') }}">❤️ Health</a>
-    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Housing') }}">🏠 Housing</a>
-    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Skills and Employment') }}">🛠 Skills & Employment</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Agriculture') }}" data-i18n="cat_agriculture">🌾 Agriculture</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Education') }}" data-i18n="cat_education">🎓 Education</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Women and Child') }}" data-i18n="cat_women_child">👩‍👧 Women & Child</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Health') }}" data-i18n="cat_health">❤️ Health</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Housing') }}" data-i18n="cat_housing">🏠 Housing</a>
+    <a class="info-card" href="{{ url_for('categories.show_category', category_name='Skills and Employment') }}" data-i18n="cat_skills">🛠 Skills & Employment</a>
   </div>
 </section>
 
 <!-- QUICK ACCESS -->
 <section id="quick" class="section">
-  <h2>Quick Access Services</h2>
+  <h2 data-i18n="quick_access_services">Quick Access Services</h2>
 
   <div class="card-grid">
     <div class="info-card">
-      Eligibility Check
-      <a class="link-btn" href="{{ url_for('home.eligibility') }}">Start →</a>
+      <span data-i18n="eligibility_check">Eligibility Check</span>
+      <a class="link-btn" href="{{ url_for('home.eligibility') }}" data-i18n="start_arrow">Start →</a>
     </div>
     <div class="info-card">
-      AI Assistant
-      <a class="link-btn" href="{{ url_for('chatbot.chatbot_page') }}">Chat →</a>
+      <span data-i18n="ai_assistant">AI Assistant</span>
+      <a class="link-btn" href="{{ url_for('chatbot.chatbot_page') }}" data-i18n="chat_arrow">Chat →</a>
     </div>
     <div class="info-card">
-      Application Status
-      <span class="text-muted">(Coming Soon)</span>
+      <span data-i18n="application_status">Application Status</span>
+      <span class="text-muted" data-i18n="coming_soon">(Coming Soon)</span>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
 <section class="cta-modern">
-  <h2>Ready to Explore Government Benefits?</h2>
-  <p>Join millions of Indians already benefiting from schemes.</p>
-  <a href="{{ url_for('auth.register') }}" class="btn-primary">Register Now</a>
+  <h2 data-i18n="cta_title">Ready to Explore Government Benefits?</h2>
+  <p data-i18n="cta_desc">Join millions of Indians already benefiting from schemes.</p>
+  <a href="{{ url_for('auth.register') }}" class="btn-primary" data-i18n="register_now">Register Now</a>
 </section>
 
-<button id="chat-btn">💬 Chat</button>
+<button id="chat-btn">💬</button>
 
 <iframe
   id="chat-iframe"
@@ -192,24 +190,61 @@
   title="Chatbot"
 ></iframe>
 
+<!-- LANGUAGE MODAL -->
+<div class="lang-modal-overlay" id="langModalOverlay">
+  <div class="lang-modal-box">
+    <div class="lang-modal-header">
+      <div>
+        <h3 data-i18n="choose_language">Choose Language</h3>
+        <p data-i18n="choose_language_sub">Select your preferred language for the portal</p>
+      </div>
+      <button class="lang-close-btn" id="closeLanguageModal">&times;</button>
+    </div>
+
+    <div class="lang-search-wrap">
+      <i class="bi bi-search"></i>
+      <input type="text" id="languageSearch" placeholder="Search language..." data-i18n-placeholder="search_language">
+    </div>
+
+    <div class="lang-grid" id="languageGrid">
+      <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="hi">हिंदी</button>
+      <button class="lang-option" data-lang="mr">मराठी</button>
+      <button class="lang-option" data-lang="gu">ગુજરાતી</button>
+      <button class="lang-option" data-lang="bn">বাংলা</button>
+      <button class="lang-option" data-lang="ta">தமிழ்</button>
+      <button class="lang-option" data-lang="te">తెలుగు</button>
+      <button class="lang-option" data-lang="kn">ಕನ್ನಡ</button>
+      <button class="lang-option" data-lang="ml">മലയാളം</button>
+      <button class="lang-option" data-lang="pa">ਪੰਜਾਬੀ</button>
+      <button class="lang-option" data-lang="or">ଓଡ଼ିଆ</button>
+      <button class="lang-option" data-lang="as">অসমীয়া</button>
+      <button class="lang-option" data-lang="ur">اردو</button>
+      <button class="lang-option" data-lang="ne">नेपाली</button>
+      <button class="lang-option" data-lang="sa">संस्कृत</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer-dark">
   <div class="container footer-grid">
     <div>
-      <h6>Contact</h6>
+      <h6 data-i18n="contact">Contact</h6>
       <p>help@sarkarisahayata.gov.in</p>
     </div>
 
     <div>
-      <h6>Popular Schemes</h6>
+      <h6 data-i18n="popular_schemes">Popular Schemes</h6>
       <p>PM Kisan</p>
       <p>Ayushman Bharat</p>
     </div>
 
     <div>
-      <h6>Administration</h6>
+      <h6 data-i18n="administration">Administration</h6>
       <a href="#"
-         style="color:#22c55e;text-decoration:none;font-weight:600">
+         style="color:#22c55e;text-decoration:none;font-weight:600"
+         data-i18n="admin_login">
         Admin Login
       </a>
       <p style="margin-top:10px;font-size:.85rem">
@@ -219,15 +254,15 @@
   </div>
 </footer>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <script>
   const btn = document.getElementById("chat-btn");
   const iframe = document.getElementById("chat-iframe");
 
   btn.addEventListener("click", () => {
     iframe.style.display =
-      iframe.style.display === "none" ? "block" : "none";
+      iframe.style.display === "none" || iframe.style.display === "" ? "block" : "none";
   });
 </script>
 </body>

@@ -3,26 +3,83 @@
 <head>
   <title>Admin Login</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .auth-lang-btn{
+      position:fixed;
+      top:20px;
+      right:20px;
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+    }
+  </style>
 </head>
 <body class="auth-bg">
 
+<button type="button" class="auth-lang-btn" id="openLanguageModal">
+  <span data-i18n="choose_language">Choose Language</span>
+</button>
+
 <div class="auth-wrapper">
   <div class="auth-card">
-    <h2>Admin Login</h2>
-    <p>Authorized access only</p>
+    <h2 data-i18n="admin_login">Admin Login</h2>
+    <p data-i18n="authorized_access_only">Authorized access only</p>
 
     <form method="POST">
       <div class="auth-field">
-        <input name="username" placeholder="Admin Username" required>
+        <input name="username" placeholder="Admin Username" data-i18n-placeholder="admin_username" required>
       </div>
       <div class="auth-field">
-        <input name="password" type="password" placeholder="Password" required>
+        <input name="password" type="password" placeholder="Password" data-i18n-placeholder="password" required>
       </div>
 
-      <button class="auth-btn">Login</button>
+      <button class="auth-btn" data-i18n="login">Login</button>
     </form>
   </div>
 </div>
 
+<div class="lang-modal-overlay" id="langModalOverlay">
+  <div class="lang-modal-box">
+    <div class="lang-modal-header">
+      <div>
+        <h3 data-i18n="choose_language">Choose Language</h3>
+        <p data-i18n="choose_language_sub">Select your preferred language for the portal</p>
+      </div>
+      <button class="lang-close-btn" id="closeLanguageModal">&times;</button>
+    </div>
+
+    <div class="lang-search-wrap">
+      <input type="text" id="languageSearch" placeholder="Search language..." data-i18n-placeholder="search_language">
+    </div>
+
+    <div class="lang-grid" id="languageGrid">
+      <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="hi">हिंदी</button>
+      <button class="lang-option" data-lang="mr">मराठी</button>
+      <button class="lang-option" data-lang="gu">ગુજરાતી</button>
+      <button class="lang-option" data-lang="bn">বাংলা</button>
+      <button class="lang-option" data-lang="ta">தமிழ்</button>
+      <button class="lang-option" data-lang="te">తెలుగు</button>
+      <button class="lang-option" data-lang="kn">ಕನ್ನಡ</button>
+      <button class="lang-option" data-lang="ml">മലയാളം</button>
+      <button class="lang-option" data-lang="pa">ਪੰਜਾਬੀ</button>
+      <button class="lang-option" data-lang="or">ଓଡ଼ିଆ</button>
+      <button class="lang-option" data-lang="as">অসমীয়া</button>
+      <button class="lang-option" data-lang="ur">اردو</button>
+      <button class="lang-option" data-lang="ne">नेपाली</button>
+      <button class="lang-option" data-lang="sa">संस्कृत</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
