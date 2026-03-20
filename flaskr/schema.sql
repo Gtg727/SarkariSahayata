@@ -18,7 +18,7 @@ CREATE TABLE user (
   email VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(200) NOT NULL,
   is_registered BOOLEAN DEFAULT FALSE,
-  user_type VARCHAR(15) DEFAULT "user"
+  user_type VARCHAR(15) DEFAULT 'user'
 );
 
 
@@ -27,7 +27,7 @@ CREATE TABLE user (
 -- ===============================
 
 CREATE TABLE otps (
-  id INT NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   otp VARCHAR(100),
   created BIGINT,
   FOREIGN KEY (id) REFERENCES user(id) ON DELETE CASCADE

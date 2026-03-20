@@ -25,6 +25,7 @@ def connect_db():
         user=cfg['MYSQL_USER'],
         passwd=cfg['MYSQL_PASSWORD'],
         db=cfg['MYSQL_DB'],
+        port=cfg['MYSQL_PORT'],
         cursorclass=MySQLdb.cursors.DictCursor,  # ✅ rows as dicts
         charset='utf8mb4',
         autocommit=True
