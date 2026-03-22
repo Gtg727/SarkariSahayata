@@ -12,6 +12,38 @@ import MySQLdb.cursors
 bp = Blueprint('home', __name__)
 
 
+
+# =====================================================
+# TRANSLATE PROXY (avoids browser CORS on Google Translate)
+# =====================================================
+@bp.route("/translate")
+def translate_proxy():
+    from flask import request, jsonify
+    import urllib.request, urllib.parse, json as _json
+
+    text = request.args.get("q", "")
+    lang = request.args.get("tl", "en")
+
+    if not text or lang == "en":
+        return jsonify({"t": text})
+
+    try:
+        url = (
+            "https://translate.googleapis.com/translate_a/single"
+            "?client=gtx&sl=en&dt=t&tl="
+            + urllib.parse.quote(lang)
+            + "&q="
+            + urllib.parse.quote(text)
+        )
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = _json.loads(resp.read().decode("utf-8"))
+        translated = "".join(item[0] for item in data[0] if item[0])
+        return jsonify({"t": translated})
+    except Exception as e:
+        return jsonify({"t": text, "error": str(e)})
+
+
 # =====================================================
 # HOME PAGE
 # =====================================================
@@ -24,7 +56,7 @@ def index():
     cursor.execute("SELECT * FROM schemes ORDER BY id DESC")
     schemes = cursor.fetchall()
 
-    return render_template("index.html", schemes=schemes)
+    return render_template("index.html", json_schemes=schemes)
 
 
 # =====================================================

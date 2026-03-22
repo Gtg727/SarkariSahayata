@@ -52,4 +52,15 @@ def create_app(test_config=None):
     from . import admin
     app.register_blueprint(admin.admin_bp)
 
+    # ── Jinja2 custom filter: parse JSON in templates ──
+    import json as _json
+    def from_json_filter(value):
+        if not value:
+            return None
+        try:
+            return _json.loads(value)
+        except Exception:
+            return None
+    app.jinja_env.filters['from_json'] = from_json_filter
+
     return app

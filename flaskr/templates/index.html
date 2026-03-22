@@ -124,26 +124,7 @@
   <h2 data-i18n="explore_by_category">Explore by Category</h2>
   <p class="section-sub" data-i18n="find_schemes_tailored">Find schemes tailored to your needs</p>
 
-  {% if json_schemes %}
-  <section class="section">
-    <h2 data-i18n="recently_added_schemes">Recently Added Schemes</h2>
-    <p class="section-sub" data-i18n="added_by_admin">Added by administrator</p>
 
-    <div class="card-grid">
-      {% for scheme in json_schemes %}
-        <div class="info-card">
-          <strong>{{ scheme.title }}</strong>
-          <p class="text-muted mt-2">
-            {{ scheme.description }}
-          </p>
-          <span class="badge bg-success">
-            {{ scheme.category }}
-          </span>
-        </div>
-      {% endfor %}
-    </div>
-  </section>
-  {% endif %}
 
   <div class="card-grid">
     <a class="info-card" href="{{ url_for('categories.show_category', category_name='Agriculture') }}" data-i18n="cat_agriculture">🌾 Agriculture</a>
@@ -207,6 +188,7 @@
     </div>
 
     <div class="lang-grid" id="languageGrid">
+      <!-- Indian Languages -->
       <button class="lang-option" data-lang="en">English</button>
       <button class="lang-option" data-lang="hi">हिंदी</button>
       <button class="lang-option" data-lang="mr">मराठी</button>
@@ -222,6 +204,53 @@
       <button class="lang-option" data-lang="ur">اردو</button>
       <button class="lang-option" data-lang="ne">नेपाली</button>
       <button class="lang-option" data-lang="sa">संस्कृत</button>
+      <!-- World Languages -->
+      <button class="lang-option" data-lang="zh-CN">中文 (简体)</button>
+      <button class="lang-option" data-lang="zh-TW">中文 (繁體)</button>
+      <button class="lang-option" data-lang="es">Español</button>
+      <button class="lang-option" data-lang="fr">Français</button>
+      <button class="lang-option" data-lang="de">Deutsch</button>
+      <button class="lang-option" data-lang="pt">Português</button>
+      <button class="lang-option" data-lang="ru">Русский</button>
+      <button class="lang-option" data-lang="ar">العربية</button>
+      <button class="lang-option" data-lang="ja">日本語</button>
+      <button class="lang-option" data-lang="ko">한국어</button>
+      <button class="lang-option" data-lang="it">Italiano</button>
+      <button class="lang-option" data-lang="tr">Türkçe</button>
+      <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+      <button class="lang-option" data-lang="th">ภาษาไทย</button>
+      <button class="lang-option" data-lang="id">Bahasa Indonesia</button>
+      <button class="lang-option" data-lang="ms">Bahasa Melayu</button>
+      <button class="lang-option" data-lang="fa">فارسی</button>
+      <button class="lang-option" data-lang="pl">Polski</button>
+      <button class="lang-option" data-lang="uk">Українська</button>
+      <button class="lang-option" data-lang="nl">Nederlands</button>
+      <button class="lang-option" data-lang="sv">Svenska</button>
+      <button class="lang-option" data-lang="no">Norsk</button>
+      <button class="lang-option" data-lang="da">Dansk</button>
+      <button class="lang-option" data-lang="fi">Suomi</button>
+      <button class="lang-option" data-lang="ro">Română</button>
+      <button class="lang-option" data-lang="hu">Magyar</button>
+      <button class="lang-option" data-lang="cs">Čeština</button>
+      <button class="lang-option" data-lang="el">Ελληνικά</button>
+      <button class="lang-option" data-lang="he">עברית</button>
+      <button class="lang-option" data-lang="sw">Kiswahili</button>
+      <button class="lang-option" data-lang="am">አማርኛ</button>
+      <button class="lang-option" data-lang="ha">Hausa</button>
+      <button class="lang-option" data-lang="yo">Yorùbá</button>
+      <button class="lang-option" data-lang="ig">Igbo</button>
+      <button class="lang-option" data-lang="af">Afrikaans</button>
+      <button class="lang-option" data-lang="az">Azərbaycan</button>
+      <button class="lang-option" data-lang="kk">Қазақша</button>
+      <button class="lang-option" data-lang="uz">O'zbek</button>
+      <button class="lang-option" data-lang="ky">Кыргызча</button>
+      <button class="lang-option" data-lang="tg">Тоҷикӣ</button>
+      <button class="lang-option" data-lang="my">မြန်မာဘာသာ</button>
+      <button class="lang-option" data-lang="km">ភាសាខ្មែរ</button>
+      <button class="lang-option" data-lang="lo">ພາສາລາວ</button>
+      <button class="lang-option" data-lang="si">සිංහල</button>
+      <button class="lang-option" data-lang="mn">Монгол</button>
+      <button class="lang-option" data-lang="ka">ქართული</button>
     </div>
   </div>
 </div>
@@ -242,7 +271,7 @@
 
     <div>
       <h6 data-i18n="administration">Administration</h6>
-      <a href="#"
+      <a href="{{ url_for('admin.admin_login') }}"
          style="color:#22c55e;text-decoration:none;font-weight:600"
          data-i18n="admin_login">
         Admin Login

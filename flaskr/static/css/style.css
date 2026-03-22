@@ -863,3 +863,30 @@ body{
     bottom:14px;
   }
 }
+
+/* ===== TOP CENTER LANGUAGE TOAST ===== */
+.top-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+
+  padding: 8px 16px;
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  opacity: 0;
+  transition: all 0.3s ease;
+
+  z-index: 9999;
+}
+
+.top-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

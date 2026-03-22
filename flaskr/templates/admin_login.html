@@ -1,85 +1,92 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — SarkariSahayata</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <style>
-    .auth-lang-btn{
-      position:fixed;
-      top:20px;
-      right:20px;
-      z-index:1000;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      border:1px solid rgba(255,255,255,.15);
-      background:rgba(255,255,255,.08);
-      color:#fff;
-      padding:10px 14px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
+    body { margin:0; font-family:'Segoe UI',sans-serif; }
+    .al-page {
+      min-height:100vh;
+      background: linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1d4ed8 100%);
+      display:flex; align-items:center; justify-content:center;
     }
+    .al-card {
+      background:#fff; border-radius:20px;
+      padding:48px 44px; width:100%; max-width:420px;
+      box-shadow:0 30px 80px rgba(0,0,0,.35);
+    }
+    .al-logo { font-size:28px; font-weight:800; color:#1e3a8a; margin-bottom:4px; }
+    .al-sub  { font-size:13px; color:#6b7280; margin-bottom:32px; }
+    .al-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:#fef9c3; color:#92400e;
+      border:1px solid #fde68a; border-radius:20px;
+      padding:4px 12px; font-size:12px; font-weight:600;
+      margin-bottom:24px;
+    }
+    label { font-size:13px; font-weight:600; color:#374151; display:block; margin-bottom:6px; }
+    .al-input {
+      width:100%; box-sizing:border-box;
+      border:1.5px solid #d1d5db; border-radius:10px;
+      padding:12px 14px; font-size:14px;
+      transition:border .2s; outline:none; margin-bottom:18px;
+    }
+    .al-input:focus { border-color:#1d4ed8; box-shadow:0 0 0 3px rgba(29,78,216,.1); }
+    .al-btn {
+      width:100%; background:#1e3a8a; color:#fff;
+      border:none; border-radius:10px; padding:13px;
+      font-size:15px; font-weight:700; cursor:pointer;
+      transition:background .2s;
+    }
+    .al-btn:hover { background:#162d6b; }
+    .al-error {
+      background:#fee2e2; border:1px solid #fca5a5;
+      color:#b91c1c; border-radius:8px;
+      padding:10px 14px; font-size:13px; margin-bottom:18px;
+    }
+    .al-back {
+      display:block; text-align:center; margin-top:18px;
+      color:#6b7280; font-size:13px; text-decoration:none;
+    }
+    .al-back:hover { color:#1e3a8a; }
+    .al-lock { font-size:48px; margin-bottom:12px; }
   </style>
 </head>
-<body class="auth-bg">
+<body>
+<div class="al-page">
+  <div class="al-card">
+    <div class="al-lock">🔐</div>
+    <div class="al-logo">SarkariSahayata</div>
+    <div class="al-sub">Admin Control Panel</div>
+    <div class="al-badge">🛡️ Authorized Access Only</div>
 
-<button type="button" class="auth-lang-btn" id="openLanguageModal">
-  <span data-i18n="choose_language">Choose Language</span>
-</button>
+    {% if error %}
+    <div class="al-error">⚠️ {{ error }}</div>
+    {% endif %}
 
-<div class="auth-wrapper">
-  <div class="auth-card">
-    <h2 data-i18n="admin_login">Admin Login</h2>
-    <p data-i18n="authorized_access_only">Authorized access only</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="al-error" style="background:#dbeafe;border-color:#93c5fd;color:#1e3a8a;">ℹ️ {{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
 
     <form method="POST">
-      <div class="auth-field">
-        <input name="username" placeholder="Admin Username" data-i18n-placeholder="admin_username" required>
-      </div>
-      <div class="auth-field">
-        <input name="password" type="password" placeholder="Password" data-i18n-placeholder="password" required>
-      </div>
+      <label>Admin Username</label>
+      <input class="al-input" name="username" placeholder="Enter admin username"
+             autocomplete="username" required>
 
-      <button class="auth-btn" data-i18n="login">Login</button>
+      <label>Password</label>
+      <input class="al-input" name="password" type="password"
+             placeholder="Enter password"
+             autocomplete="current-password" required>
+
+      <button class="al-btn" type="submit">🔓 Login to Admin Panel</button>
     </form>
+
+    <a class="al-back" href="{{ url_for('home.index') }}">← Back to homepage</a>
   </div>
 </div>
-
-<div class="lang-modal-overlay" id="langModalOverlay">
-  <div class="lang-modal-box">
-    <div class="lang-modal-header">
-      <div>
-        <h3 data-i18n="choose_language">Choose Language</h3>
-        <p data-i18n="choose_language_sub">Select your preferred language for the portal</p>
-      </div>
-      <button class="lang-close-btn" id="closeLanguageModal">&times;</button>
-    </div>
-
-    <div class="lang-search-wrap">
-      <input type="text" id="languageSearch" placeholder="Search language..." data-i18n-placeholder="search_language">
-    </div>
-
-    <div class="lang-grid" id="languageGrid">
-      <button class="lang-option" data-lang="en">English</button>
-      <button class="lang-option" data-lang="hi">हिंदी</button>
-      <button class="lang-option" data-lang="mr">मराठी</button>
-      <button class="lang-option" data-lang="gu">ગુજરાતી</button>
-      <button class="lang-option" data-lang="bn">বাংলা</button>
-      <button class="lang-option" data-lang="ta">தமிழ்</button>
-      <button class="lang-option" data-lang="te">తెలుగు</button>
-      <button class="lang-option" data-lang="kn">ಕನ್ನಡ</button>
-      <button class="lang-option" data-lang="ml">മലയാളം</button>
-      <button class="lang-option" data-lang="pa">ਪੰਜਾਬੀ</button>
-      <button class="lang-option" data-lang="or">ଓଡ଼ିଆ</button>
-      <button class="lang-option" data-lang="as">অসমীয়া</button>
-      <button class="lang-option" data-lang="ur">اردو</button>
-      <button class="lang-option" data-lang="ne">नेपाली</button>
-      <button class="lang-option" data-lang="sa">संस्कृत</button>
-    </div>
-  </div>
-</div>
-
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

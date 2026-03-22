@@ -1,8 +1,10 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>{{ category }} Schemes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
       .category-lang-btn{
@@ -20,10 +22,13 @@
         border-radius:999px;
         cursor:pointer;
         font-weight:600;
+        font-size:14px;
       }
+      .scheme-title-text { transition: opacity 0.3s; }
+      .scheme-desc-text  { transition: opacity 0.3s; }
+      .translating { opacity: 0.4; }
     </style>
 </head>
-
 <body class="bg-light">
 
 <button type="button" class="category-lang-btn" id="openLanguageModal">
@@ -33,7 +38,9 @@
 
 <div class="container mt-5">
 
-<h2 class="mb-4 text-center">{{ category }} <span data-i18n="schemes_word">Schemes</span></h2>
+<h2 class="mb-4 text-center fw-bold">
+  {{ category }} <span data-i18n="schemes_word">Schemes</span>
+</h2>
 
 {% if schemes %}
 <div class="row">
@@ -42,15 +49,19 @@
         <div class="card shadow-sm h-100">
             <div class="card-body d-flex flex-column">
 
-                <h5 class="fw-bold">{{ scheme.title }}</h5>
+                <h5 class="fw-bold scheme-title-text"
+                    data-title="{{ scheme.title }}">
+                    {{ scheme.title }}
+                </h5>
 
-                <p class="text-muted small">
-                    {{ scheme.description[:150] }}{% if scheme.description|length > 150 %}...{% endif %}
+                <p class="text-muted small scheme-desc-text"
+                   data-desc="{{ scheme.description[:200] if scheme.description else '' }}">
+                    {{ scheme.description[:150] if scheme.description else '' }}{% if scheme.description and scheme.description|length > 150 %}...{% endif %}
                 </p>
 
                 <div class="mt-auto">
                     <a href="{{ url_for('home.scheme_detail', scheme_id=scheme.id) }}"
-                       class="btn btn-primary btn-sm" data-i18n="view_full_details">
+                       class="btn btn-success btn-sm" data-i18n="view_full_details">
                         View Full Details
                     </a>
                 </div>
@@ -75,6 +86,7 @@
 
 </div>
 
+<!-- LANGUAGE MODAL (full 60-language grid) -->
 <div class="lang-modal-overlay" id="langModalOverlay">
   <div class="lang-modal-box">
     <div class="lang-modal-header">
@@ -84,12 +96,10 @@
       </div>
       <button class="lang-close-btn" id="closeLanguageModal">&times;</button>
     </div>
-
     <div class="lang-search-wrap">
       <i class="bi bi-search"></i>
       <input type="text" id="languageSearch" placeholder="Search language..." data-i18n-placeholder="search_language">
     </div>
-
     <div class="lang-grid" id="languageGrid">
       <button class="lang-option" data-lang="en">English</button>
       <button class="lang-option" data-lang="hi">हिंदी</button>
@@ -106,10 +116,113 @@
       <button class="lang-option" data-lang="ur">اردو</button>
       <button class="lang-option" data-lang="ne">नेपाली</button>
       <button class="lang-option" data-lang="sa">संस्कृत</button>
+      <button class="lang-option" data-lang="zh-CN">中文 (简体)</button>
+      <button class="lang-option" data-lang="zh-TW">中文 (繁體)</button>
+      <button class="lang-option" data-lang="es">Español</button>
+      <button class="lang-option" data-lang="fr">Français</button>
+      <button class="lang-option" data-lang="de">Deutsch</button>
+      <button class="lang-option" data-lang="pt">Português</button>
+      <button class="lang-option" data-lang="ru">Русский</button>
+      <button class="lang-option" data-lang="ar">العربية</button>
+      <button class="lang-option" data-lang="ja">日本語</button>
+      <button class="lang-option" data-lang="ko">한국어</button>
+      <button class="lang-option" data-lang="it">Italiano</button>
+      <button class="lang-option" data-lang="tr">Türkçe</button>
+      <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+      <button class="lang-option" data-lang="th">ภาษาไทย</button>
+      <button class="lang-option" data-lang="id">Bahasa Indonesia</button>
+      <button class="lang-option" data-lang="ms">Bahasa Melayu</button>
+      <button class="lang-option" data-lang="fa">فارسی</button>
+      <button class="lang-option" data-lang="pl">Polski</button>
+      <button class="lang-option" data-lang="uk">Українська</button>
+      <button class="lang-option" data-lang="nl">Nederlands</button>
+      <button class="lang-option" data-lang="sv">Svenska</button>
+      <button class="lang-option" data-lang="no">Norsk</button>
+      <button class="lang-option" data-lang="da">Dansk</button>
+      <button class="lang-option" data-lang="fi">Suomi</button>
+      <button class="lang-option" data-lang="ro">Română</button>
+      <button class="lang-option" data-lang="hu">Magyar</button>
+      <button class="lang-option" data-lang="cs">Čeština</button>
+      <button class="lang-option" data-lang="el">Ελληνικά</button>
+      <button class="lang-option" data-lang="he">עברית</button>
+      <button class="lang-option" data-lang="sw">Kiswahili</button>
+      <button class="lang-option" data-lang="am">አማርኛ</button>
+      <button class="lang-option" data-lang="ha">Hausa</button>
+      <button class="lang-option" data-lang="yo">Yorùbá</button>
+      <button class="lang-option" data-lang="ig">Igbo</button>
+      <button class="lang-option" data-lang="af">Afrikaans</button>
+      <button class="lang-option" data-lang="az">Azərbaycan</button>
+      <button class="lang-option" data-lang="kk">Қазақша</button>
+      <button class="lang-option" data-lang="uz">O'zbek</button>
+      <button class="lang-option" data-lang="ky">Кыргызча</button>
+      <button class="lang-option" data-lang="tg">Тоҷикӣ</button>
+      <button class="lang-option" data-lang="my">မြန်မာဘာသာ</button>
+      <button class="lang-option" data-lang="km">ភាសាខ្មែរ</button>
+      <button class="lang-option" data-lang="lo">ພາສາລາວ</button>
+      <button class="lang-option" data-lang="si">සිංහල</button>
+      <button class="lang-option" data-lang="mn">Монгол</button>
+      <button class="lang-option" data-lang="ka">ქართული</button>
     </div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<script>
+// Translate all scheme cards on this page using the Flask proxy
+async function translateCategorySchemes(lang) {
+  const titles = document.querySelectorAll('.scheme-title-text');
+  const descs  = document.querySelectorAll('.scheme-desc-text');
+
+  if (lang === 'en') {
+    titles.forEach(el => { el.textContent = el.getAttribute('data-title') || el.textContent; });
+    descs.forEach(el  => { el.textContent = el.getAttribute('data-desc')  || el.textContent; });
+    return;
+  }
+
+  async function tr(text) {
+    if (!text) return text;
+    const cacheKey = 'tr_' + lang + '_' + btoa(unescape(encodeURIComponent(text))).substring(0, 40);
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) return cached;
+    } catch(e) {}
+    try {
+      const res = await fetch(\`/translate?tl=\${encodeURIComponent(lang)}&q=\${encodeURIComponent(text)}\`);
+      const data = await res.json();
+      const translated = data.t || text;
+      try { sessionStorage.setItem(cacheKey, translated); } catch(e) {}
+      return translated;
+    } catch(e) { return text; }
+  }
+
+  titles.forEach(el => el.classList.add('translating'));
+  descs.forEach(el  => el.classList.add('translating'));
+
+  for (const el of titles) {
+    const original = el.getAttribute('data-title');
+    if (original) { el.textContent = await tr(original); }
+    el.classList.remove('translating');
+  }
+  for (const el of descs) {
+    const original = el.getAttribute('data-desc');
+    if (original) { el.textContent = await tr(original); }
+    el.classList.remove('translating');
+  }
+}
+
+// Run on page load with saved language
+document.addEventListener('DOMContentLoaded', function() {
+  const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+  translateCategorySchemes(savedLang);
+});
+
+// Re-run when language changes
+window.addEventListener('languageChanged', function(e) {
+  translateCategorySchemes(e.detail.language);
+});
+</script>
+
 </body>
 </html>
