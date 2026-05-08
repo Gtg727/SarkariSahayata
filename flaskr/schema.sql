@@ -42,6 +42,7 @@ CREATE TABLE user_details (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100),
   age INT,
+  dob DATE,
   gender VARCHAR(100),
   income INT,
   caste VARCHAR(100),
@@ -49,6 +50,8 @@ CREATE TABLE user_details (
   occupation VARCHAR(100),
   aadhar VARCHAR(100),
   pan VARCHAR(100),
+  doc_type VARCHAR(20),
+  doc_verified BOOLEAN DEFAULT FALSE,
   user_id INT,
   FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
@@ -78,3 +81,10 @@ ADD COLUMN gender VARCHAR(50),
 ADD COLUMN caste VARCHAR(50),
 ADD COLUMN state VARCHAR(100),
 ADD COLUMN occupation VARCHAR(100);
+-- ===============================
+-- MIGRATION: Add DOB + doc fields
+-- Run this on existing databases
+-- ===============================
+-- ALTER TABLE user_details ADD COLUMN IF NOT EXISTS dob DATE AFTER age;
+-- ALTER TABLE user_details ADD COLUMN IF NOT EXISTS doc_type VARCHAR(20) AFTER pan;
+-- ALTER TABLE user_details ADD COLUMN IF NOT EXISTS doc_verified BOOLEAN DEFAULT FALSE AFTER doc_type;
